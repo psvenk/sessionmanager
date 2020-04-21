@@ -2,16 +2,13 @@
 <!ENTITY general.caption "Všeobecné">
 <!ENTITY startNend.caption "Spustenie a ukončenie">
 <!ENTITY resume_sess.label "Pri spustení vždy načítať nasledujúce reláciu:">
-<!ENTITY resume_sess.accesskey "s">
 <!ENTITY backup_sess.label "Pri ukončení">
 <!ENTITY backup_sess.accesskey "u">
 <!ENTITY backup_session.label0 "zrušiť aktuálnu reláciu">
 <!ENTITY backup_session.label1 "vytvoriť zálohu aktuálnej relácie">
 <!ENTITY backup_session.label2 "opýtať sa, či vytvoriť zálohu aktuálnej relácie">
 <!ENTITY crashrecovery.label "Povoliť obnovenie po páde">
-<!ENTITY crashrecovery.accesskey "e">
 <!ENTITY autosave_session.label "Automaticky uložiť nahradenú reláciu">
-<!ENTITY autosave_session.accesskey "a">
 <!ENTITY restoring.caption "Obnova relácií">
 <!ENTITY sessionList.caption "Zoznam relácií">
 <!ENTITY orderList.label "Usporiadať zoznam relácií">
@@ -31,26 +28,20 @@
 <!ENTITY submenu.accesskey "Z">
 <!ENTITY persistence.caption "Trvanie">
 <!ENTITY closed_tabs.label "Obnoviť zoznam kariet, ktoré je možné znova otvoriť, pre všetky okná:">
-<!ENTITY closed_tabs.accesskey "e">
 <!ENTITY closed_tabs.label0 "nikdy">
 <!ENTITY closed_tabs.label1 "pri spustení">
 <!ENTITY closed_tabs.label2 "vždy">
 <!ENTITY window_list.label "Pri ukončení nemazať zoznam zatvorených okien">
-<!ENTITY window_list.accesskey "o">
 <!ENTITY clear_list.label "Vymazať zoznam">
 <!ENTITY clear_list.accesskey "v">
 <!ENTITY advanced.caption "Rozšírené">
 <!ENTITY name_format.caption "Názvy relácii">
 <!ENTITY name_format.label "Formát návrhov názvov relácií:">
-<!ENTITY name_format.accesskey "F">
 <!ENTITY name_format.desc "Môžete použiť &#37;t ako skratku pre titulok aktívnej karty, &#37;d dnešný dátum a &#37;m pre čas. Titulok môžete bude obmedzený na počet # znakov: &#37;#t.">
-<!ENTITY sessionstore.caption "SessionStore">
 <!ENTITY service.caption "Nastavenia pre &quot;SessionStore&quot;">
 <!ENTITY service.description "Nemeňte tieto nastavenia, ak neviete čo robíte.">
 <!ENTITY interval.label "Minimálny časový interval medzi ukladaním stavu (v sekundách):">
-<!ENTITY interval.accesskey "i">
 <!ENTITY postdata.label "Maximálne množstvo uložených údajov POSTDATA (v bytoch; -1 pre všetkých):">
-<!ENTITY postdata.accesskey "x">
 <!ENTITY privacy.label "Uložiť citlivé údaje (údaje formulárov, POSTDATA a cookies) pre">
 <!ENTITY privacy.accesskey "c">
 <!ENTITY privacy.level0 "všetky stránky">
@@ -61,13 +52,11 @@
 <!ENTITY encrypt.caption "Zašifrovanie">
 <!ENTITY encrypt.desc "Upozornenie: Zašifrované údaje relácií je možné otvoriť len v profiloch s identickými súbormi key3.db a cert8.db. Ak je nastavené aj hlavné heslo, relácie nemôžu byť zašifrované alebo dešifrované bez jeho zadania.">
 <!ENTITY encrypt.label "Zašifrovať údaje o uložených reláciách a zatvorených oknách">
-<!ENTITY encrypt.accesskey "e">
 <!ENTITY change_dir.label "Zmeniť">
 <!ENTITY change_dir.accesskey "Z">
 <!ENTITY default_dir.label "Obnoviť predvolené">
 <!ENTITY default_dir.accesskey "b">
 <!ENTITY sanitizer.label "Uložené relácie rozšírenia Session Manager">
-<!ENTITY sanitizer.accesskey "M">
 <!ENTITY saving.caption "Ukladanie relácie">
 <!ENTITY lastpage.label "Zobraziť naposledy načítanú stránku">
 <!ENTITY noSession.label "Žiadna">
@@ -79,9 +68,7 @@
 <!ENTITY cookies.label "Uložiť cookies relácie">
 <!ENTITY cookies.accesskey "U">
 <!ENTITY sessionImport.caption "Importovať relácie z...">
-<!ENTITY importSS.label "SessionSaver">
 <!ENTITY importSS.accesskey "S">
-<!ENTITY importTMP.label "Tab Mix Plus">
 <!ENTITY importTMP.accesskey "T">
 <!ENTITY apply.label "Použiť">
 <!ENTITY save_and_restore.caption "Uloženie a obnova">
@@ -89,7 +76,6 @@
 <!ENTITY middleclick.label "Kliknutím stredným tlačidlom myši znova otvoriť naposledy zatvorenú kartu">
 <!ENTITY middleclick.accesskey "u">
 <!ENTITY max_display.label "Maximálny počet relácií zobrazených v ponuke">
-<!ENTITY max_display.accesskey "M">
 <!ENTITY hide_tools_menu.label "Nezobrazovať ponuku Správca relácií v ponuke Nástroje">
 <!ENTITY hide_tools_menu.accesskey "e">
 <!ENTITY disable_cache_fixer.label "Vypnúť funkciu opravy vyrovnávacej pamäte">
@@ -113,15 +99,12 @@
 <!ENTITY open_log.label "Otvoriť súbor so záznamom">
 <!ENTITY open_log.accesskey "b">
 <!ENTITY delete_log.label "Odstrániť súbor so záznamom">
-<!ENTITY delete_log.accesskey "d">
 <!ENTITY log_level_state.label "Zaznamenať stav pri ukončení">
 <!ENTITY log_level_state.accesskey "a">
 <!ENTITY log_level_trace.label "Zaznamenávať údaje o trasovaní">
-<!ENTITY log_level_trace.accesskey "t">
 <!ENTITY log_level_data.label "Zaznamenávať údaje o premenných">
 <!ENTITY log_level_data.accesskey "m">
 <!ENTITY log_level_info.label "Zaznamenávať informačné správy">
-<!ENTITY log_level_info.accesskey "i">
 <!ENTITY log_level_extra.label "Zaznamenávať extra údaje ladenia">
 <!ENTITY log_level_extra.accesskey "d">
 <!ENTITY reload.label "Obnoviť obsah všetkých obnovených okien">
@@ -132,7 +115,6 @@
 <!ENTITY allow_saving_during_pbm.label2 "Vyžaduje povolenie šifrovania">
 <!ENTITY allow_saving_during_pbm.accesskey "f">
 <!ENTITY session_name_in_titlebar.label "názov aktívnej relácie do titulku">
-<!ENTITY session_name_in_titlebar.accesskey "n">
 <!ENTITY prepend.label "Pridať">
 <!ENTITY append.label "Pripojiť">
 <!ENTITY donotadd.label "Nepridávať">
@@ -143,7 +125,6 @@
 <!ENTITY export_settings.label "Exportovať nastavenia">
 <!ENTITY export_settings.accesskey "x">
 <!ENTITY import_settings.label "Importovať nastavenia">
-<!ENTITY import_settings.accesskey "I">
 <!ENTITY settingsImportExport.caption "Import/export nastavení">
 <!ENTITY keyboard.caption "Klávesové skratky">
 <!ENTITY keyboard.desc "Ak chcete pre akciu používať klávesovú skratku, zadajte ju sem. Inak nechajte pole prázdne. Zmeny sa neprejavia v existujúcich oknách.">
@@ -156,6 +137,5 @@
 <!ENTITY backup_on_restart.label "Uložiť zálohu pri reštarte prehliadača">
 <!ENTITY backup_on_restart.accesskey "U">
 <!ENTITY keep_deleted_sessions.label "Počet dní, počas ktorých dočasne uchovávať odstránené relácie:">
-<!ENTITY keep_deleted_sessions.accesskey "d">
 <!ENTITY concurrent.label "Počet kariet, ktoré obnovovať súčasne">
 <!ENTITY concurrent.accesskey "k">

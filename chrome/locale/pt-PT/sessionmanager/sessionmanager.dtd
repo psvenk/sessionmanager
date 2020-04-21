@@ -1,7 +1,4 @@
-<!ENTITY sessionManager "Session Manager">
-<!ENTITY toolsmenu.accesskey "M">
 <!ENTITY save.label "Guardar Sessão...">
-<!ENTITY save.accesskey "S">
 <!ENTITY saveOne.label "Guardar a Janela Actual...">
 <!ENTITY saveOne.accesskey "G">
 <!ENTITY closeSession.label "Guardar e Fechar a Sessão Actual">
@@ -9,13 +6,11 @@
 <!ENTITY abandonSession.label "Abandonar a Sessão Actual">
 <!ENTITY abandonSession.accesskey "b">
 <!ENTITY rename.label "Renomear Sessão">
-<!ENTITY rename.accesskey "R">
 <!ENTITY remove.label "Apagar Sessão...">
 <!ENTITY remove.accesskey "A">
 <!ENTITY openFolder.label "Abrir a Pasta da Sessão">
 <!ENTITY openFolder.accesskey "P">
 <!ENTITY options.label "Opções do &sessionManager;">
-<!ENTITY options.accesskey "O">
 <!ENTITY undoClosed.label "Re-abrir Fechadas...">
 <!ENTITY undoClosed.accesskey "F">
 <!ENTITY closedWindows "Janelas Fechadas:">
@@ -53,54 +48,43 @@
 <!ENTITY change_group.label "Mudar grupo">
 <!ENTITY change_group.accesskey "M">
 <!ENTITY group.label "Grupo de sessões...">
-<!ENTITY group.accesskey "G">
 <!ENTITY toolbar.menu.tooltip "Abrir o menu de gestão de sessão">
 <!ENTITY toolbar.undo.menu.tooltip "Abrir as janelas e o menu de separadores fechados recentemente">
 <!ENTITY prompt.save_every1.label "Guardar a cada">
 <!ENTITY prompt.save_every2.label "minutos (desactivado se em branco)">
 <!ENTITY winTabTree.restoreHeader "Restaurar">
 <!ENTITY winTabTree.listHeader "Janelas e separadores">
-<!-- LOCALIZATION NOTE: &#37;S will be replaced with a number. -->
 <!ENTITY winTabTree.windowLabel "Janela &#37;S">
 <!ENTITY load.label "Carregar sessão...">
 <!ENTITY load.accesskey "C">
 <!ENTITY prompt.append.label "Anexar à sessão">
 <!ENTITY prompt.replace.label "Substituir sessão">
-<!ENTITY ctrl_click_note.label "Nota: clicar numa entrada de separador enquanto carrega na tecla CTRL, abre esse separador na janela existente.">
+<!ENTITY tab_open_click_note.label "Nota: clicar numa entrada de separador enquanto carrega na tecla ALT, abre esse separador na janela existente.">
 <!ENTITY select_all.label "Seleccionar tudo">
 <!ENTITY select_none.label "Não seleccionar nada">
 <!ENTITY toggle_selection.label "Trocar selecção">
 <!ENTITY winTabTree.urlHeader "Localização">
 <!ENTITY prompt.append_window.label "Juntar à janela actual">
 <!ENTITY session_explorer.label "Explorador de sessões">
-<!ENTITY session_explorer.accesskey "E">
 <!ENTITY closeWindowSession.label "Guardar e fechar a sessão da janela">
 <!ENTITY closeWindowSession.accesskey "h">
 <!ENTITY abandonWindowSession.label "Abandonar a sessão da janela">
-<!ENTITY abandonWindowSession.accesskey "b">
 <!ENTITY load_append_window.label "Carregar (anexar à janela actual)">
 <!ENTITY load_append_window.accesskey "x">
 <!ENTITY leave_window_open.label "Deixar esta janela aberta">
-<!ENTITY clearTabList.label "Limpar a lista de separadores &apos;fechados&apos;...">
+<!ENTITY clearTabList.label "Limpar a lista de separadores 'fechados'...">
 <!ENTITY clearTabList.accesskey "s">
-<!ENTITY clearWindowList.label "Limpar a lista de janelas &apos;fechadas&apos;...">
+<!ENTITY clearWindowList.label "Limpar a lista de janelas 'fechadas'...">
 <!ENTITY clearWindowList.accesskey "j">
 <!ENTITY hidden.label "Oculto">
 <!ENTITY contribute.label "Contribuir">
 <!ENTITY support.label "Ajude este extra:">
 <!ENTITY session_group_verb.label "Grupo">
 <!ENTITY deleted_sessions.label "Sessões eliminadas">
-<!ENTITY deleted_sessions.accesskey "e">
 <!ENTITY empty_trash.label "Remover todas as sessões eliminadas">
-<!ENTITY empty_trash.accesskey "R">
 <!ENTITY permanently_delete.label "Eliminar sessão permanentemente">
-<!ENTITY permanently_delete.accesskey "P">
 <!ENTITY search.label "Pesquisar...">
 <!ENTITY edit.label "Editar Sessão...">
-<!ENTITY edit.accesskey "E">
 <!ENTITY addtab.label "Adicionar separador à sessão ...">
-<!ENTITY addtab.accesskey "A">
 <!ENTITY viewcontents.label "Ver conteúdo da sessão">
-<!ENTITY viewcontents.accesskey "V">
 <!ENTITY export_to_html.label "Exportar o conteúdo da sessão para adicionar o arquivo HTML aos marcadores">
-<!ENTITY export_to_html.accesskey "E">

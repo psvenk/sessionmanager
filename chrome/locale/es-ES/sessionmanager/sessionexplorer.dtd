@@ -5,13 +5,11 @@
 <!ENTITY session_open_overwrite.accesskey "s">
 <!ENTITY session_open_overwrite.tooltip "¿Abrir la sesión seleccionada?">
 <!ENTITY session_open_newwindow.label "Abrir (nueva ventana)">
-<!ENTITY session_open_newwindow.accesskey "n">
 <!ENTITY session_open_newwindow.tooltip "¿Abrir la sesión seleccionada?">
 <!ENTITY session_open_append.label "Abrir (añadir)">
 <!ENTITY session_open_append.accesskey "d">
 <!ENTITY session_open_append.tooltip "Abrir la sesión seleccionada">
 <!ENTITY session_rename.label "Renombrar...">
-<!ENTITY session_rename.accesskey "R">
 <!ENTITY session_rename.tooltip "Renombrar la sesión seleccionada">
 <!ENTITY session_rename_ok.label "Renombrar">
 <!ENTITY session_delete.label "Borrar">
@@ -28,7 +26,6 @@
 <!ENTITY session_open_folder.label "Abrir carpeta">
 <!ENTITY session_open_folder.accesskey "c">
 <!ENTITY session_open_folder.tooltip "Abrir la carpeta del administrador de sesiones">
-<!ENTITY column_autosave.label "A">
 <!ENTITY column_autosave.tooltip "Sesión guardada automáticamente">
 <!ENTITY column_windows.label "V">
 <!ENTITY column_windows.tooltip "Ventana">

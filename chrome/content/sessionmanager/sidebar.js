@@ -1,4 +1,20 @@
-onLoad = function() {
+"use strict";
+
+// Create a namespace so as not to polute the global namespace
+(function() {
+let obj = {};
+
+// import the session_manager.jsm into the namespace
+Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+Components.utils.import("resource://gre/modules/Services.jsm");
+
+XPCOMUtils.defineLazyModuleGetter(obj, "SharedData", "resource://sessionmanager/modules/shared_data/data.jsm");
+XPCOMUtils.defineLazyModuleGetter(obj, "SessionIo", "resource://sessionmanager/modules/session_file_io.jsm");
+
+// use the namespace
+obj.gSessionManagerSidebarObject = {
+
+onLoad: function() {
 	this.removeEventListener("load", onLoad, false);
 	this.addEventListener("unload", onUnload, false);
 	
@@ -6,15 +22,15 @@ onLoad = function() {
 	document.getElementById('session_tree').view = treeView;	
 		
 	// update list on notification
-	//OBSERVER_SERVICE.addObserver(gSessionManager, "sessionmanager-list-update", false);
-}	
+	//Services.obs.addObserver(this, "sessionmanager-list-update", false);
+},	
 
-onUnload = function() {
+onUnload: function() {
 	this.removeEventListener("unload", onUnload, false);
-	//OBSERVER_SERVICE.removeObserver(gSessionManager, "sessionmanager-list-update");
-}
+	//Services.obs.removeObserver(this, "sessionmanager-list-update");
+},
 
-var treeView = {
+treeView: {
 	defaultChildData: {
 		backupFolder: { container: true, open: false, childCount: 0 },
 		backupSeparator: { separator: true, row: 1 }
@@ -71,7 +87,7 @@ var treeView = {
 	updateList: function() {
 		if (!this.allowUpdate) return;
 		this.allowUpdate = false;
-		var sessions = this.gSessionManager.getSessions();
+		var sessions = obj.SessionIo.getSessions();
 
 		// clear out existing items from tree
 		var children = document.getElementById("sessions");
@@ -103,7 +119,7 @@ var treeView = {
 			if ((sessions.latestBackUpTime == aSession.timestamp) || (sessions.latestTime == aSession.timestamp)) {
 				property = property + "latest ";
 			}
-			if ((aSession.fileName == this.gSessionManager.mPref["_autosave_filename"]) || (this.gSessionManager.mActiveWindowSessions[aSession.fileName])) {
+			if ((aSession.fileName == obj.SharedData._autosave_filename) || (obj.SharedData.mActiveWindowSessions[aSession.fileName])) {
 				property = property + "disabled";
 			}
 			if (property) name.setAttribute("properties", property);
@@ -137,7 +153,7 @@ var treeView = {
 			else {
 				treeView.visibleData.push(aSession.name);
 			}
-		}, this);
+		});
 		
 		document.getElementById("backup_container").hidden = (backups.childNodes.length == 0);
 		document.getElementById("backup_separator").hidden = (backups.childNodes.length == 0);
@@ -148,7 +164,7 @@ var treeView = {
 	handleEvent: function(aEvent) {
 		// ignore non-enter key presses and right clicks
 		if (((aEvent.type == "keypress") && (aEvent.keyCode != KeyEvent.DOM_VK_RETURN)) ||
-		    ((aEvent.type == "click") && (aEvent.button == 2))) {
+				((aEvent.type == "click") && (aEvent.button == 2))) {
 			return;
 		}
 		
@@ -156,8 +172,19 @@ var treeView = {
 		var filename = treeView.getCellText(index);
 		dump("index = " + index + ", filename = " + filename + "\n");
 		
-		//this.gSessionManager.load(filename, (event.shiftKey && (event.ctrlKey || event.metaKey))?"overwrite":(event.shiftKey)?"newwindow":(event.ctrlKey || event.metaKey)?"append":"");
+		//this.obj.SessionIo.load(filename, (event.shiftKey && (event.ctrlKey || event.metaKey))?"overwrite":(event.shiftKey)?"newwindow":(event.ctrlKey || event.metaKey)?"append":"");
 	}
 }
+}
+// Define a window.obj object
+/*
+if(!window.com) window.com={};
+if(!com.morac) com.morac={};
+if(!com.morac.SessionManagerAddon) com.morac.SessionManagerAddon={
+	gSessionManagerSidebarObject: obj.gSessionManagerSidebarObject
+}
+*/
 
-window.addEventListener("load", onLoad, false);
+window.addEventListener("load", obj.gSessionManagerSidebarObject.onLoad, false);
+	
+})()

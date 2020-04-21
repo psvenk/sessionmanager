@@ -65,9 +65,7 @@
 <!ENTITY change_dir.label "Zmień">
 <!ENTITY change_dir.accesskey "Z">
 <!ENTITY default_dir.label "Domyślna">
-<!ENTITY default_dir.accesskey "D">
 <!ENTITY sanitizer.label "Zapisane sesje Menedżera sesji">
-<!ENTITY sanitizer.accesskey "M">
 <!ENTITY saving.caption "Zapis sesji">
 <!ENTITY lastpage.label "wyświetl ostatnio wczytaną stronę">
 <!ENTITY noSession.label "brak">
@@ -77,7 +75,6 @@
 <!ENTITY selectSession.label "wybierz sesję">
 <!ENTITY selectSession.accesskey "z">
 <!ENTITY cookies.label "Zapisuj ciasteczka sesji">
-<!ENTITY cookies.accesskey "C">
 <!ENTITY sessionImport.caption "Importuj sesje z…">
 <!ENTITY importSS.label "SessionSavera">
 <!ENTITY importSS.accesskey "S">
@@ -89,16 +86,13 @@
 <!ENTITY middleclick.label "Kliknięcie ś.p.m. otwiera ponownie ostatnio zamkniętą kartę">
 <!ENTITY middleclick.accesskey "K">
 <!ENTITY max_display.label "Maksymalna liczba sesji wyświetlanych w menu (-1 wszystkie)">
-<!ENTITY max_display.accesskey "M">
 <!ENTITY hide_tools_menu.label "Nie wyświetlaj menu menedżera sesji w menu Narzędzia">
 <!ENTITY hide_tools_menu.accesskey "U">
 <!ENTITY disable_cache_fixer.label "Wyłącz funkcję naprawiania bufora">
 <!ENTITY disable_cache_fixer.accesskey "F">
 <!ENTITY encrypted_only.label "Jeśli szyfrowanie uległo awarii, nie zapisuj niezaszyfrowanych danych">
-<!ENTITY encrypted_only.accesskey "N">
 <!ENTITY encrypt2.desc "Ostrzeżenie! Włączenie tej funkcji spowoduje, że jeśli sesja lub dane okna nie mogą być zaszyfrowane, wszystkie dane zostaną utracone bezpowrotnie. Szyfrowanie nie będzie działało jeżeli hasło główne jest wymagane, a nie zostało wprowadzone. Proszę rozważnie i ostrożnie włączać tę funkcję.">
 <!ENTITY closed_window_list.label "Użyj listy zamkniętych okien przeglądarki">
-<!ENTITY closed_window_list.accesskey "U">
 <!ENTITY closed_windows.label "Odtwarzaj listę ponownie otwieranych okien:">
 <!ENTITY closed_windows.accesskey "t">
 <!ENTITY open_as_tabs.label "Otwieraj jako karty w aktywnym oknie">
@@ -137,13 +131,10 @@
 <!ENTITY append.label "Dodawaj na końcu">
 <!ENTITY donotadd.label "Nie dodawaj">
 <!ENTITY use_browser_crash_prompt.label "Używaj powiadomień odzyskiwania sesji przeglądarki">
-<!ENTITY use_browser_crash_prompt.accesskey "U">
 <!ENTITY reset_warnings.label "Resetuj ostrzeżenia">
-<!ENTITY reset_warnings.accesskey "R">
 <!ENTITY export_settings.label "Eksportuj">
 <!ENTITY export_settings.accesskey "K">
 <!ENTITY import_settings.label "Importuj">
-<!ENTITY import_settings.accesskey "I">
 <!ENTITY settingsImportExport.caption "Import/Eksport ustawień">
 <!ENTITY keyboard.caption "Skróty klawiszowe">
 <!ENTITY keyboard.desc "Aby używać skrótów klawiszowych dla danej czynności, wprowadź je tutaj. Jeśli nie chcesz używać skrótów – pozostaw pole puste. Zmiany dokonane tutaj nie będą stosowane do bieżących okien.">
@@ -168,7 +159,6 @@
 <!ENTITY update_message.label "Po aktualizacji wyświetlaj stronę aktualizacji">
 <!ENTITY update_message.accesskey "t">
 <!ENTITY double_click_session.label "Dwukrotne kliknięcie aktualnej sesji zastępuje sesję i">
-<!ENTITY double_click_session.accesskey "D">
 <!ENTITY replace_with_name_replace.label "zmienia jej nazwę na nazwę z pola tekstowego">
 <!ENTITY replace_with_name_keep.label "pozostawia nazwę sesji">
 <!ENTITY show_icon_in_menu.label "Wyświetlaj ikonę w menu Narzędzia">
@@ -186,7 +176,6 @@
 <!ENTITY use_sql_cache.label "Buforuj na dysku podstawowe dane sesji. Włącza wyszukiwanie wewnątrz sesji.">
 <!ENTITY use_sql_cache.accesskey "B">
 <!ENTITY rebuild_cache.label "Przebuduj dane buforu">
-<!ENTITY rebuild_cache.accesskey "R">
 <!ENTITY log_level_error.label "Zapisuj błędy w dzienniku zdarzeń">
 <!ENTITY log_level_error.accesskey "D">
 <!ENTITY allow_duplicates.label "Zezwalaj na zapisywanie sesji z taką samą nazwą, jak istniejąca sesja">

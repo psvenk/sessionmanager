@@ -60,13 +60,12 @@
 <!ENTITY prompt.save_every2.label "минути (оневозможено ако е празно)">
 <!ENTITY winTabTree.restoreHeader "Обнови">
 <!ENTITY winTabTree.listHeader "Прозорци и Јазичиња">
-<!--    LOCALIZATION NOTE: &#37;S will be replaced with a number.    -->
 <!ENTITY winTabTree.windowLabel "Прозорец &#37;S">
 <!ENTITY load.label "Вчитај ја сесијата...">
 <!ENTITY load.accesskey "В">
 <!ENTITY prompt.append.label "Додади на сесијата">
 <!ENTITY prompt.replace.label "Замени ја сесијата">
-<!ENTITY ctrl_click_note.label "Забелешка: кликањето на запис на јазичето додека го држите притиснато CTRL копчето, ќе го отвори тоа јазиче во постоечкиот прозорец.">
+<!ENTITY tab_open_click_note.label "Забелешка: кликањето на запис на јазичето додека го држите притиснато ALT копчето, ќе го отвори тоа јазиче во постоечкиот прозорец.">
 <!ENTITY select_all.label "Избери ги сите">
 <!ENTITY select_none.label "Избери ниедно">
 <!ENTITY toggle_selection.label "Смени го изборот">

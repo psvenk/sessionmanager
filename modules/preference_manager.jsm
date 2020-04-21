@@ -1,19 +1,20 @@
-var EXPORTED_SYMBOLS = ["gPreferenceManager"];
+"use strict";
+
+this.EXPORTED_SYMBOLS = ["PreferenceManager"];
 
 const Cc = Components.classes;
 const Ci = Components.interfaces;
-const Cu = Components.utils;
 
-// import modules
-Cu.import("resource://sessionmanager/modules/logger.jsm");
+// Get lazy getter functions from XPCOMUtils and Services
+Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+Components.utils.import("resource://gre/modules/Services.jsm");
 
-// Get lazy getter functions from XPCOMUtils
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+// Logger object - use same module file
+XPCOMUtils.defineLazyModuleGetter(this, "logError", "resource://sessionmanager/modules/logger.jsm");
+
+XPCOMUtils.defineLazyModuleGetter(this, "SessionIo", "resource://sessionmanager/modules/session_file_io.jsm");
 
 // Lazily define services
-XPCOMUtils.defineLazyServiceGetter(this, "mObserverService", "@mozilla.org/observer-service;1", "nsIObserverService");
-XPCOMUtils.defineLazyServiceGetter(this, "mPreferenceBranch", "@mozilla.org/preferences-service;1", "nsIPrefBranch2");
-XPCOMUtils.defineLazyServiceGetter(this, "VERSION_COMPARE_SERVICE", "@mozilla.org/xpcom/version-comparator;1", "nsIVersionComparator");
 if (Cc["@mozilla.org/fuel/application;1"]) {
 	XPCOMUtils.defineLazyServiceGetter(this, "Application", "@mozilla.org/fuel/application;1", "fuelIApplication");
 }
@@ -33,13 +34,13 @@ var _initialized = false;
 // API functions
 //
 
-var gPreferenceManager = {
+this.PreferenceManager = {
 
 	// Call this as a function instead of running internally because it needs to run before the session_manager module's initialize function
 	initialize: function()
 	{
 		if (!_initialized) {
-			smPreferenceBranch = Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefService).getBranch(PREFERENCE_ROOT).QueryInterface(Ci.nsIPrefBranch2);
+			smPreferenceBranch = Services.prefs.getBranch(PREFERENCE_ROOT).QueryInterface(Ci.nsIPrefBranch2);
 			movePreferenceRoot();
 			_initialized = true;
 		}
@@ -48,14 +49,14 @@ var gPreferenceManager = {
 	getAllPrefs: function() {
 		let count = {}, prefs = [];
 		let children = smPreferenceBranch.getChildList("",count);
-		// Firefix 3.6 and earlier don't like the "extension.{GUID}" string and complaing about "overlarge minimum"
-		// so cut off the "extensions." part which works just as well.
-		let regex = new RegExp(PREFERENCE_ROOT.replace(/extensions./,"") + "(.*)");
+		let regex = new RegExp(PREFERENCE_ROOT + "(.*)");
 		for (let i=0; i < children.length; i++) {
 			try {
 				let pref = Application.prefs.get(PREFERENCE_ROOT + children[i]);
 				let match = pref.name.match(regex);
-				if (match) prefs.push({ name: match[1], value: pref.value });
+				if (match) {
+					prefs.push({ name: match[1], value: pref.value });
+				}
 			} catch(ex) {
 				logError(ex);
 			}
@@ -70,29 +71,33 @@ var gPreferenceManager = {
 
 	get: function(aName, aDefault, aUseRootBranch) 
 	{
+		let value = (typeof aDefault == "undefined") ? "" : aDefault;
+	
 		// calling from background threads causes a crash, so use nsiPrefBranch in that case - Bug 565445
-		if (Cc["@mozilla.org/thread-manager;1"].getService().isMainThread) {
-			return Application.prefs.getValue((aUseRootBranch ? "" : PREFERENCE_ROOT) + aName, aDefault);
+		if (Services.tm.isMainThread) {
+			value = Application.prefs.getValue((aUseRootBranch ? "" : PREFERENCE_ROOT) + aName, value);
 		}
 		else {
 			try
 			{
-				let pb = (aUseRootBranch)?mPreferenceBranch:smPreferenceBranch;
+				let pb = (aUseRootBranch)?Services.prefs:smPreferenceBranch;
 				switch (pb.getPrefType(aName))
 				{
 					case pb.PREF_STRING:
 						// handle unicode values
-						return pb.getComplexValue(aName,Ci.nsISupportsString).data
+						value = pb.getComplexValue(aName,Ci.nsISupportsString).data
+						break;
 					case pb.PREF_BOOL:
-						return pb.getBoolPref(aName);
+						value = pb.getBoolPref(aName);
+						break;
 					case pb.PREF_INT:
-						return pb.getIntPref(aName);
+						value = pb.getIntPref(aName);
+						break;
 				}
 			}
 			catch (ex) { }
-			
-			return aDefault;
 		}
+		return value;
 	},
 
 	set: function(aName, aValue, aUseRootBranch) 
@@ -101,7 +106,7 @@ var gPreferenceManager = {
 		
 		try {
 			Application.prefs.setValue((aUseRootBranch ? "" : PREFERENCE_ROOT) + aName, aValue);
-			if (forceSave) mObserverService.notifyObservers(null,"sessionmanager-preference-save",null);
+			if (forceSave) Services.obs.notifyObservers(null,"sessionmanager-preference-save",null);
 		} 
 		catch(ex) { logError(ex); }
 	},
@@ -120,7 +125,7 @@ var gPreferenceManager = {
 		let extensions = Application.extensions ? Application.extensions : aExtensions;
 		if (!extensions) {
 			if (typeof(Application.getExtensions) == "function") {
-				Application.getExtensions(gPreferenceManager.resetWarningPrompts);
+				Application.getExtensions(PreferenceManager.resetWarningPrompts);
 			}
 			return;
 		}
@@ -178,19 +183,20 @@ var gPreferenceManager = {
 		// Correct any inconsistencies do to updating restoring old version number (see session_manager.jsm::checkForUpdate
 		let restoreVersion = this.get("version", "");
 		// these aren't used anymore so delete if they exist
-		if (VERSION_COMPARE_SERVICE.compare(restoreVersion, "0.6.2.5") < 0) this.delete("_no_reload");
-		if (VERSION_COMPARE_SERVICE.compare(restoreVersion, "0.7.6") < 0) this.delete("disable_cache_fixer");
+		if (Services.vc.compare(restoreVersion, "0.6.2.5") < 0) this.delete("_no_reload");
+		if (Services.vc.compare(restoreVersion, "0.7.6") < 0) this.delete("disable_cache_fixer");
+		if (Services.vc.compare(restoreVersion, "0.9.7.5") < 0) this.delete("work_around_mozilla_addon_sdk_bug");
 		// New version doesn't automatically append "sessions" to user chosen directory so
 		// convert existing preference to point to that folder.
-		if (VERSION_COMPARE_SERVICE.compare(restoreVersion, "0.7") < 0) {
+		if (Services.vc.compare(restoreVersion, "0.7") < 0) {
 			if (this.get("sessions_dir", null)) {
-				let dir = this.getUserDir("sessions");
+				let dir = SessionIo.getUserDir("sessions");
 				this.set("sessions_dir", dir.path)
 			}
 		}
 		this.set("version", currentVersion);
 		
-		let window = Cc['@mozilla.org/appshell/window-mediator;1'].getService(Ci.nsIWindowMediator).getMostRecentWindow("SessionManager:Options");
+		let window = Services.wm.getMostRecentWindow("SessionManager:Options");
 		
 		// update options window for preferences that don't automatically update window
 		if (success) {
@@ -199,9 +205,9 @@ var gPreferenceManager = {
 		}
 
 		// put up alert
-		let bundle = Cc["@mozilla.org/intl/stringbundle;1"].getService(Ci.nsIStringBundleService).createBundle("chrome://sessionmanager/locale/sessionmanager.properties");
+		let bundle = Services.strings.createBundle("chrome://sessionmanager/locale/sessionmanager.properties");
 		let text = success ? bundle.GetStringFromName("import_successful") :  (bundle.GetStringFromName("import_failed") + " - " + reason);
-		Cc["@mozilla.org/embedcomp/prompt-service;1"].getService(Ci.nsIPromptService).alert(window, bundle.GetStringFromName("import_prompt"), text);
+		Services.prompt.alert(window, bundle.GetStringFromName("import_prompt"), text);
 	},
 	
 	export: function(aExtensions)
@@ -209,7 +215,7 @@ var gPreferenceManager = {
 		let extensions = Application.extensions ? Application.extensions : aExtensions;
 		if (!extensions) {
 			if (typeof(Application.getExtensions) == "function") {
-				Application.getExtensions(gPreferenceManager.export);
+				Application.getExtensions(PreferenceManager.export);
 			}
 			return;
 		}
@@ -227,7 +233,7 @@ var gPreferenceManager = {
 				for (let i=0; i<prefs.length; i++) {
 					myprefs.push({ name: prefs[i].name, value: prefs[i].value });
 				}
-				prefsString = JSON.stringify(myprefs);
+				let prefsString = JSON.stringify(myprefs);
 				
 				// file is nsIFile, prefsString is a string
 				let foStream = Cc["@mozilla.org/network/file-output-stream;1"].createInstance(Ci.nsIFileOutputStream);
@@ -251,26 +257,29 @@ var gPreferenceManager = {
 			logError(ex); 
 		}
 		
-		let window = Cc['@mozilla.org/appshell/window-mediator;1'].getService(Ci.nsIWindowMediator).getMostRecentWindow("SessionManager:Options");
-		let bundle = Cc["@mozilla.org/intl/stringbundle;1"].getService(Ci.nsIStringBundleService).createBundle("chrome://sessionmanager/locale/sessionmanager.properties");
+		let window = Services.wm.getMostRecentWindow("SessionManager:Options");
+		let bundle = Services.strings.createBundle("chrome://sessionmanager/locale/sessionmanager.properties");
 		let text = success ? bundle.GetStringFromName("export_successful") :  (bundle.GetStringFromName("export_failed") + " - " + reason);
-		Cc["@mozilla.org/embedcomp/prompt-service;1"].getService(Ci.nsIPromptService).alert(window, bundle.GetStringFromName("export_prompt"), text);
+		Services.prompt.alert(window, bundle.GetStringFromName("export_prompt"), text);
 	},
 
 	// Use Preference Service for observing instead of FUEL because FUEL's preference observer is not working - Bug 488587
 	observe: function(aPrefName, aObserver, aOwnsWeak, aUseRootBranch)
 	{
-		(aUseRootBranch ? mPreferenceBranch : smPreferenceBranch).addObserver(aPrefName, aObserver, aOwnsWeak);
+		(aUseRootBranch ? Services.prefs : smPreferenceBranch).addObserver(aPrefName, aObserver, aOwnsWeak);
 	},
 
 	unobserve: function(aPrefName, aObserver, aUseRootBranch)
 	{
 		try {
-			((aUseRootBranch)?mPreferenceBranch:smPreferenceBranch).removeObserver(aPrefName, aObserver);
+			((aUseRootBranch)?Services.prefs:smPreferenceBranch).removeObserver(aPrefName, aObserver);
 		}
 		catch(ex) { logError(ex); }
 	}
 }
+
+// Don't allow changing
+Object.freeze(PreferenceManager);
 
 //	
 // private functions
@@ -283,7 +292,7 @@ function checkForForceSave(aName, aValue, aUseRootBranch)
 	
 	for (let i=0; i<names.length; i++) {
 		if (aName == names[i]) {
-			let currentValue = gPreferenceManager.get(aName, null, aUseRootBranch);
+			let currentValue = PreferenceManager.get(aName, null, aUseRootBranch);
 			return (currentValue != aValue);
 		}
 	}
@@ -295,7 +304,7 @@ function movePreferenceRoot()
 {
 	// If old values exist
 	if (Application.prefs.has(OLD_PREFERENCE_ROOT + "version")) {
-		let prefBranch = Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefService).getBranch(OLD_PREFERENCE_ROOT);
+		let prefBranch = Services.prefs.getBranch(OLD_PREFERENCE_ROOT);
 		let count = {};
 		let children = prefBranch.getChildList("",count);
 		for (let i=0; i < children.length; i++) {
@@ -317,10 +326,10 @@ function movePreferenceRoot()
 // aSave false = load
 function chooseFile(aSave)
 {
-	let bundle = Cc["@mozilla.org/intl/stringbundle;1"].getService(Ci.nsIStringBundleService).createBundle("chrome://sessionmanager/locale/sessionmanager.properties");
+	let bundle = Services.strings.createBundle("chrome://sessionmanager/locale/sessionmanager.properties");
 	let nsIFilePicker = Ci.nsIFilePicker;
 	let filepicker = Cc["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
-	let window = Cc['@mozilla.org/appshell/window-mediator;1'].getService(Ci.nsIWindowMediator).getMostRecentWindow("SessionManager:Options");
+	let window = Services.wm.getMostRecentWindow("SessionManager:Options");
 	
 	filepicker.init(window, bundle.GetStringFromName((aSave ? "export" : "import") + "_prompt"), (aSave ? nsIFilePicker.modeSave : nsIFilePicker.modeOpen));
 	filepicker.appendFilter(bundle.GetStringFromName("settings_file_extension_description"), "*." + bundle.GetStringFromName("session_manager_settings_file_extension"));

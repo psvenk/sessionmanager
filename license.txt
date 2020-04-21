@@ -1,6 +1,4 @@
-﻿The following license applies to all files (except crashrecovery.js):
-
-/* ***** BEGIN LICENSE BLOCK *****
+﻿/* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
  *
  * The contents of this file are subject to the Mozilla Public License Version
@@ -16,8 +14,8 @@
  * The Original Code is the Session Manager extension.
  *
  * The Initial Developer of the Original Code is
- * Morac (http://sessionmanager.mozdev.org/).
- * Portions created by the Initial Developer are Copyright (C) 2007-2011
+ * Michael Kraft (Morac) (http://sessionmanager.mozdev.org/).
+ * Portions created by the Initial Developer are Copyright (C) 2007-2013
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
@@ -68,6 +66,3 @@
  * the terms of any one of the MPL, the GPL or the LGPL.
  *
  * ***** END LICENSE BLOCK ***** */
-
-For the license to crashrecovery.js see
-jar:http://www.haslo.ch/zeniko/software/crashrecovery.xpi!/license.txt

@@ -45,7 +45,7 @@
 <!ENTITY name_format.accesskey "F">
 <!ENTITY name_format.desc "Use &#37;t para o título da aba ativa, &#37;d para a data de hoje e &#37;m para a hora; além disso o tamanho do título pode ser limitado com caracteres:&#37;t.">
 <!ENTITY sessionstore.caption "Armazenamento de Sessões">
-<!ENTITY service.caption "Opções do &quot;Armazenamento de Sessões&quot;">
+<!ENTITY service.caption "Opções do \&quot;Armazenamento de Sessões\&quot;">
 <!ENTITY service.description "Não mexa nisso, a menos que saiba o que está fazendo!">
 <!ENTITY interval.label "Intervalo de tempo mínimo entre dois salvamentos (em segundos):">
 <!ENTITY interval.accesskey "i">
@@ -102,7 +102,7 @@
 <!ENTITY closed_windows.label "Restaurar a lista de janelas que podem ser reabertas:">
 <!ENTITY closed_windows.accesskey "s">
 <!ENTITY open_as_tabs.label "Abrir como abas na janela atual">
-<!ENTITY open_as_tabs.accesskey "p">
+<!ENTITY open_as_tabs.accesskey "b">
 <!ENTITY last_window_shutdown.label "Tratar o fechamento da última janela aberta do navegador como um desligamento">
 <!ENTITY last_window_shutdown.accesskey "T">
 <!ENTITY preselect_previous_session.label "Pré-selecionar">
@@ -111,18 +111,18 @@
 <!ENTITY enable_logging.label "Ativar registros">
 <!ENTITY enable_logging.accesskey "r">
 <!ENTITY open_log.label "Abrir arquivo de Registros">
-<!ENTITY open_log.accesskey "o">
+<!ENTITY open_log.accesskey "a">
 <!ENTITY delete_log.label "Apagar arquivo de Registros">
 <!ENTITY delete_log.accesskey "A">
 <!ENTITY log_level_state.label "Estado do Registros de Desligamento">
-<!ENTITY log_level_state.accesskey "s">
-<!ENTITY log_level_trace.label "Fazer registro de dados de rastreamento">
-<!ENTITY log_level_trace.accesskey "t">
+<!ENTITY log_level_state.accesskey "D">
+<!ENTITY log_level_trace.label "Fazer registro dos dados de rastreamento">
+<!ENTITY log_level_trace.accesskey "r">
 <!ENTITY log_level_data.label "Fazer registro de dados de variáveis">
 <!ENTITY log_level_data.accesskey "v">
 <!ENTITY log_level_info.label "Fazer registro de mensagens informativas">
 <!ENTITY log_level_info.accesskey "i">
-<!ENTITY log_level_extra.label "Fazer registro de dados extra de depuração">
+<!ENTITY log_level_extra.label "Fazer registro de dados extras de depuração">
 <!ENTITY log_level_extra.accesskey "e">
 <!ENTITY reload.label "Recarregar Todas as Janelas Restauradas">
 <!ENTITY reload.accesskey "T">
@@ -130,7 +130,7 @@
 <!ENTITY overwrite.accesskey "u">
 <!ENTITY allow_saving_during_pbm.label "Permitir salvar durante o Modo de Navegação Privado">
 <!ENTITY allow_saving_during_pbm.label2 "Requer que a encriptação esteja ativa">
-<!ENTITY allow_saving_during_pbm.accesskey "S">
+<!ENTITY allow_saving_during_pbm.accesskey "u">
 <!ENTITY session_name_in_titlebar.label "nome das sessões ativas para a barra de título">
 <!ENTITY session_name_in_titlebar.accesskey "n">
 <!ENTITY prepend.label "Prefixar">
@@ -139,7 +139,7 @@
 <!ENTITY use_browser_crash_prompt.label "Usar o aviso de recuperação de falhas incorporado ao navegador">
 <!ENTITY use_browser_crash_prompt.accesskey "U">
 <!ENTITY reset_warnings.label "Limpar avisos">
-<!ENTITY reset_warnings.accesskey "R">
+<!ENTITY reset_warnings.accesskey "L">
 <!ENTITY export_settings.label "Exportar configurações">
 <!ENTITY export_settings.accesskey "x">
 <!ENTITY import_settings.label "Importar configurações">
@@ -158,7 +158,7 @@
 <!ENTITY keep_deleted_sessions.label "Número de dias para manter cópia das sessões apagadas:">
 <!ENTITY keep_deleted_sessions.accesskey "d">
 <!ENTITY concurrent.label "Número de abas que podem ser restauradas ao mesmo tempo">
-<!ENTITY concurrent.accesskey "T">
+<!ENTITY concurrent.accesskey "b">
 <!ENTITY do_not_color_toolbar_button.label "Não trocar a cor do botão da barra de ferramentas enquanto as sessões estiverem sendo carregadas">
 <!ENTITY do_not_color_toolbar_button.accesskey "N">
 <!ENTITY preserve_app_tabs.label "Não substituir abas de Aplicativos fixadas">
@@ -172,7 +172,7 @@
 <!ENTITY replace_with_name_replace.label "substitui o nome da sessão anterior com o nome da caixa de texto">
 <!ENTITY replace_with_name_keep.label "mantém o nome da sessão já existente">
 <!ENTITY show_icon_in_menu.label "Mostrar ícone no menu de ferramentas">
-<!ENTITY show_icon_in_menu.accesskey "I">
+<!ENTITY show_icon_in_menu.accesskey "í">
 <!ENTITY set_encryption_password.label "Digite uma senha para proteger sua chave de criptografia da sessão">
 <!ENTITY set_encryption_password.accesskey "D">
 <!ENTITY change_encryption_key_password.label "Alterar a senha de criptografia">

@@ -44,7 +44,6 @@
 <!ENTITY name_format.label "Формат за предлозите за имиња на сесијата:">
 <!ENTITY name_format.accesskey "п">
 <!ENTITY name_format.desc "Користи &#37;t за наслови на активните јазичиња, &#37;d за денешниот датум, &#37;m за време; додатно може да се ограничи должината на насловот на # знаци: &#37;#t.">
-<!ENTITY sessionstore.caption "SessionStore">
 <!ENTITY service.caption "Поставки на &quot;SessionStore&quot;">
 <!ENTITY service.description "Не ги допирај овие, освен ако знаеш што правиш!">
 <!ENTITY interval.label "Минимум временски интервал помеѓу две зачувувања на состојбата(во секунди):">
@@ -79,9 +78,7 @@
 <!ENTITY cookies.label "Зачувај ги Колачињата на Сесијата">
 <!ENTITY cookies.accesskey "К">
 <!ENTITY sessionImport.caption "Внеси Сесии од...">
-<!ENTITY importSS.label "SessionSaver">
 <!ENTITY importSS.accesskey "В">
-<!ENTITY importTMP.label "Tab Mix Plus">
 <!ENTITY importTMP.accesskey "В">
 <!ENTITY apply.label "Примени">
 <!ENTITY save_and_restore.caption "Зачувување &amp; Обновување">

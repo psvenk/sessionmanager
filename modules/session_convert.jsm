@@ -1,28 +1,59 @@
+"use strict";
+
 /*
  * This file contains conversion routines for converting from SessionSaver and TMP session formats to
  * Session Manager session format.  
  * Portions of the following code as marked were originally written by onemen, rue and pike
  */
 
+this.EXPORTED_SYMBOLS = ["SessionConverter"];
+
+const Cc = Components.classes;
+const Ci = Components.interfaces;
+const report = Components.utils.reportError;
+
+// Get lazy getter functions from XPCOMUtils and Services
+Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+Components.utils.import("resource://gre/modules/Services.jsm");
+
+XPCOMUtils.defineLazyServiceGetter(this, "secret_decoder_ring_service", "@mozilla.org/security/sdr;1", "nsISecretDecoderRing");
+ 
+// import the session_manager modules
+XPCOMUtils.defineLazyModuleGetter(this, "PreferenceManager", "resource://sessionmanager/modules/preference_manager.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "SessionIo", "resource://sessionmanager/modules/session_file_io.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "SharedData", "resource://sessionmanager/modules/shared_data/data.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "Utils", "resource://sessionmanager/modules/utils.jsm");
+
+this.SessionConverter = {
+	convertTMP: function(aFileUri, aSilent) {
+		if (aFileUri) {
+			gConvertTMPSession.init(true);
+			if (!gConvertTMPSession.convertFile(aFileUri, aSilent) && !aSilent) {
+				gConvertTMPSession._prompt.alert(null, Utils._string("sessionManager"), Utils._string("ss_none"));
+			}
+			gConvertTMPSession.cleanup();
+		}
+		else
+			gConvertTMPSession.init();
+	},
+	convertSessionSaver: function() {
+		gSessionSaverConverter.init();
+	},
+	convertToLatestSessionFormat: function(aFile, aState) {
+		return oldFormatConverter.convertToLatestSessionFormat(aFile, aState);
+	},
+	decodeOldFormat: function(aIniString, moveClosedTabs) {
+		return oldFormatConverter.decodeOldFormat(aIniString, moveClosedTabs);
+	}
+}
+
+// Don't allow changing
+Object.freeze(SessionConverter);
+
 /*
  * Code to convert from SessionSaver 0.2 format to Session Manager format
  * Original code by Morac except where indicated otherwise
  */
-
-var EXPORTED_SYMBOLS = ["gSessionSaverConverter", "gConvertTMPSession"];
-
-const Cc = Components.classes;
-const Ci = Components.interfaces;
-const Cu = Components.utils;
-const report = Components.utils.reportError;
- 
-// import the session_manager.jsm into the namespace
-Cu.import("resource://sessionmanager/modules/session_manager.jsm");
-
-// EOL Character - dependent on operating system.
-var os = Cc["@mozilla.org/xre/app-info;1"].getService(Ci.nsIXULRuntime).OS;
-var _EOL = /win|os[\/_]?2/i.test(os)?"\r\n":/mac|darwin/i.test(os)?"\r":"\n";
-delete os;
 
 var gSessionSaverConverter = {
 	
@@ -40,27 +71,26 @@ var gSessionSaverConverter = {
 	D : ["  ", "| "," |", " ||"], // new-style
 	
 	init: function() {
-		var windowMediator  = Cc['@mozilla.org/appshell/window-mediator;1'].getService(Ci.nsIWindowMediator);
-		var chromeWin = windowMediator.getMostRecentWindow("navigator:browser");
+		var chromeWin = Services.wm.getMostRecentWindow("navigator:browser");
 		if (!chromeWin) {
-			this._prompt.alert(null, gSessionManager._string("sessionManager"), gSessionManager._string("no_browser_windows"));
+			Services.prompt.alert(null, Utils._string("sessionManager"), Utils._string("no_browser_windows"));
 			return;
 		}
 		
 		// if encrypting, force master password and exit if not entered
 		try {
-			if (gSessionManager.mPref["encrypt_sessions"]) SECRET_DECODER_RING_SERVICE.encryptString("");
+			if (PreferenceManager.get("encrypt_sessions")) 
+				secret_decoder_ring_service.encryptString("");
 		}
 		catch(ex) {
-			gSessionManager.cryptError(gSessionManager._string("encrypt_fail2"));
+			Utils.cryptError(Utils._string("encrypt_fail2"));
 			return;
 		}
 
-		this.prefService     = Cc['@mozilla.org/preferences-service;1'].getService(Ci.nsIPrefService);
-		this.rootBranch         = this.prefService.getBranch(null);
-		this.Branch             = this.prefService.getBranch(this.prefBranch);
-		this.staticBranch       = this.prefService.getBranch(this.prefBranch + this.prefBranchStatic);
-		this.windowBranch       = this.prefService.getBranch(this.prefBranch + this.prefBranchWindows);
+		this.rootBranch    = Services.prefs.getBranch(null);
+		this.Branch        = Services.prefs.getBranch(this.prefBranch);
+		this.staticBranch  = Services.prefs.getBranch(this.prefBranch + this.prefBranchStatic);
+		this.windowBranch  = Services.prefs.getBranch(this.prefBranch + this.prefBranchWindows);
 		
 		var aObj = {}, aObj2 = {}; 
 		this.staticBranch.getChildList("", aObj);
@@ -73,11 +103,11 @@ var gSessionSaverConverter = {
 				 this.Branch.getBoolPref("SM_Converted")) {
 				skip = true;
 				this.selectAll = false;
-				if (this.confirm(gSessionManager._string("ss_convert_again"))) okay = false;
+				if (this.confirm(Utils._string("ss_convert_again"))) okay = false;
 				
 			}
 			if (okay) {
-				if (skip || !this.confirm(gSessionManager._string("ss_confirm_convert"))) {
+				if (skip || !this.confirm(Utils._string("ss_confirm_convert"))) {
 					var data = this.createSessionData();
 					this.findValidSession(data,true);
 					this.Branch.setBoolPref("SM_Converted", true);
@@ -85,17 +115,16 @@ var gSessionSaverConverter = {
 			}
 			
 			// check if SessionSaver installed and if so don't offer to delete data
-			if (!chromeWin.SessionSaver && !this.confirm(gSessionManager._string("ss_confirm_archive"))) {
+			if (!chromeWin.SessionSaver && !this.confirm(Utils._string("ss_confirm_archive"))) {
 				if (this.exportSession(chromeWin)) {
 					try{ this.Branch.deleteBranch(""); } 
-					catch(e) { this._prompt.alert(null,gSessionManager._string("sessionManager"), "Removed Fail: "+e); }
+					catch(e) { Services.prompt.alert(null,Utils._string("sessionManager"), "Removed Fail: "+e); }
 				}
 			}
 		}
 		else {
-			if (!this.confirm(gSessionManager._string("ss_confirm_import"))) this.importSession(chromeWin);
+			if (!this.confirm(Utils._string("ss_confirm_import"))) this.importSession(chromeWin);
 		}
-		this.prefService = null;
 		this.rootBranch = null;
 		this.Branch = null;
 		this.staticBranch = null;
@@ -103,19 +132,14 @@ var gSessionSaverConverter = {
 	},
 
 	confirm: function (aMsg) {
-		var promptService = this._prompt;
-		return promptService.confirmEx(null,
-										 gSessionManager._string("sessionManager"),
+		return Services.prompt.confirmEx(null,
+										 Utils._string("sessionManager"),
 										 aMsg,
-										 (promptService.BUTTON_TITLE_YES * promptService.BUTTON_POS_0)
-										+ (promptService.BUTTON_TITLE_NO * promptService.BUTTON_POS_1),
+										 (Services.prompt.BUTTON_TITLE_YES * Services.prompt.BUTTON_POS_0)
+										+ (Services.prompt.BUTTON_TITLE_NO * Services.prompt.BUTTON_POS_1),
 										 null, null, null, null, {});
 	},
 	
-	get _prompt() {
-		return Cc["@mozilla.org/embedcomp/prompt-service;1"].getService(Ci.nsIPromptService);
-	},
-		
 	get _sessions() {
 		return gSessionSaverConverter.sessionList;
 	},
@@ -204,15 +228,15 @@ var gSessionSaverConverter = {
 		}
 		
 		if (failedList != "\n") {
-			this._prompt.alert(null,gSessionManager._string("sessionManager"), gSessionManager._string("ss_failed")+failedList);
+			Services.prompt.alert(null,Utils._string("sessionManager"), Utils._string("ss_failed")+failedList);
 		}
 		
 		if (!this.sessionList.length) {
-			this._prompt.alert(null, gSessionManager._string("sessionManager"), gSessionManager._string("ss_none"));
+			Services.prompt.alert(null, Utils._string("sessionManager"), Utils._string("ss_none"));
 			return;
 		}
 		
-		var sessions = gSessionManager.selectSession(gSessionManager._string("ss_select"), gSessionManager._string("ss_convert"), 
+		var sessions = Utils.selectSession(Utils._string("ss_select"), Utils._string("ss_convert"), 
 													 { multiSelect: true, selectAll: this.selectAll }, gSessionSaverConverter.getSessions);
 		if (sessions) {
 			sessions = sessions.split("\n");
@@ -220,17 +244,17 @@ var gSessionSaverConverter = {
 				var session = this.sessionList.filter(function(element,index,array) { return (element.name == aSession); });
 				if (session.length) {
 					var date = new Date();
-					var aName = gSessionManager.getFormattedName("[ SessionSaver ] " + aSession, date);
-					var file = gSessionManager.getSessionDir(gSessionManager.makeFileName(aName), true);
+					var aName = Utils.getFormattedName("[ SessionSaver ] " + aSession, date);
+					var file = SessionIo.getSessionDir(Utils.makeFileName(aName), true);
 					var state = "[SessionManager v2]\nname=" + aName + "\ntimestamp=" + Date.now() + "\nautosave=false\tcount=" + 
 								 session[0].windows + "/" + session[0].tabs + "\tgroup=[SessionSaver]\n" + 
-								 gSessionManager.decryptEncryptByPreference(gSessionManager.JSON_encode(this.sessions[aSession]));
-					gSessionManager.writeFile(file, state);
+								 Utils.decryptEncryptByPreference(Utils.JSON_encode(this.sessions[aSession]));
+					SessionIo.writeFile(file, state);
 				}
 			}, this);
 		
-			this._prompt.alert(null,gSessionManager._string("sessionManager"),
-					((sessions.length>1)?gSessionManager._string("ss_converted_many"):gSessionManager._string("ss_converted_one"))+":\n\n. . ."+sessions.join("\n. . ."));
+			Services.prompt.alert(null,Utils._string("sessionManager"),
+					((sessions.length>1)?Utils._string("ss_converted_many"):Utils._string("ss_converted_one"))+":\n\n. . ."+sessions.join("\n. . ."));
 		}
 		delete(this.sessionList);
 		delete(this.sessions);
@@ -347,7 +371,7 @@ var gSessionSaverConverter = {
 		fp.defaultExtension = ext;
 		
 		if (fp.show() != fp.returnCancel) {
-			stream.init(fp.file, 0x01, 0444, null);
+			stream.init(fp.file, 0x01, 292, null);
 			streamIO.init(stream);
 			var data = streamIO.read(stream.available());
 			streamIO.close(); stream.close();
@@ -368,7 +392,7 @@ var gSessionSaverConverter = {
 				extraLines = ""; 
 				lastHash = lineParse[1];
 			}
-			else extraLines = extraLines + _EOL + res;
+			else extraLines = extraLines + Utils.EOL + res;
 		}
 		var client={};
 		var d =new Date(), curDate =(d.getMonth()+1)+"."+d.getDate()+"."+((d.getFullYear()+"").slice(2));
@@ -399,7 +423,7 @@ var gSessionSaverConverter = {
 
 		if (shouldConvert) {
 			var sessionCnt = zHash.asArray.length;
-			if (sessionCnt==0) return this._prompt.alert(gSessionManager._string("ss_none")); 
+			if (sessionCnt==0) return Services.prompt.alert(Utils._string("ss_none")); 
 			this.convertSession(client,zHash);
 		}
 		
@@ -439,7 +463,7 @@ var gSessionSaverConverter = {
 		var zHash = this.findValidSession(data,false);
 		// make sure all newlines are set to OS default.
 		data = data.replace(/\r\n?/g, "\n");
-		data = data.replace(/\n/g, _EOL);
+		data = data.replace(/\n/g, Utils.EOL);
 		var fp = Cc["@mozilla.org/filepicker;1"].createInstance(Ci.nsIFilePicker);
 		var filestream = Cc["@mozilla.org/network/file-output-stream;1"].createInstance(Ci.nsIFileOutputStream);
 		var buffered   = Cc["@mozilla.org/network/buffered-output-stream;1"].createInstance(Ci.nsIBufferedOutputStream);
@@ -464,9 +488,9 @@ var gSessionSaverConverter = {
 				alert("The Export failed: try using a unique, or new, filename.");
 				return false;
 			}
-			fp.file.create(fp.file.NORMAL_FILE_TYPE, 0666);
+			fp.file.create(fp.file.NORMAL_FILE_TYPE, 438);
 	
-			filestream.init(fp.file, 0x02 | 0x08, 0644, 0);
+			filestream.init(fp.file, 0x02 | 0x08, 420, 0);
 			buffered.init(filestream, 64 * 1024);
 			binstream.setOutputStream(buffered);
 			binstream.writeBytes(data,data.length);
@@ -493,34 +517,34 @@ var gConvertTMPSession = {
 		this.RDFService = Cc["@mozilla.org/rdf/rdf-service;1"].getService(Ci.nsIRDFService);
 		this.RDFResource = Ci.nsIRDFResource;
 		
-		var windowMediator  = Cc['@mozilla.org/appshell/window-mediator;1'].getService(Ci.nsIWindowMediator);
-		var chromeWin = windowMediator.getMostRecentWindow("navigator:browser");
+		var chromeWin = Services.wm.getMostRecentWindow("navigator:browser");
 		if (!chromeWin) {
-			this._prompt.alert(null, gSessionManager._string("sessionManager"), gSessionManager._string("no_browser_windows"));
+			Services.prompt.alert(null, Utils._string("sessionManager"), Utils._string("no_browser_windows"));
 			return;
 		}
 
 		// if encryption, force master password and exit if not entered
 		try {
-			if (gSessionManager.mPref["encrypt_sessions"]) SECRET_DECODER_RING_SERVICE.encryptString("");
+			if (PreferenceManager.get("encrypt_sessions"))
+				secret_decoder_ring_service.encryptString("");
 		}
 		catch(ex) {
-			gSessionManager.cryptError(gSessionManager._string("encrypt_fail2"));
+			Utils.cryptError(Utils._string("encrypt_fail2"));
 			this.RDFService = null;
 			this.RDFResource = null;
 			return;
 		}
 		
-		if (!gSessionManager.tabMixPlusEnabled) {
-			this._prompt.alert(null, gSessionManager._string("sessionManager"), gSessionManager._string("tmp_no_install"));
+		if (!SharedData.tabMixPlusEnabled) {
+			Services.prompt.alert(null, Utils._string("sessionManager"), Utils._string("tmp_no_install"));
 			return;
 		}
 		else {
-			this.SessionManager = chromeWin.SessionManager || chromeWin.TabmixSessionManager;
-			this.convertSession = chromeWin.convertSession || chromeWin.TabmixConvertSession;
-			this.gSessionPath = chromeWin.gSessionPath || chromeWin.TabmixSessionManager.gSessionPath
+			this.SessionManager = chromeWin.TabmixSessionManager;
+			this.convertSession = chromeWin.TabmixConvertSession;
+			this.gSessionPath = chromeWin.TabmixSessionManager.gSessionPath
 			if (!aSetupOnly && !this.convertFile()) {
-				if (!this.confirm(gSessionManager._string("tmp_no_default"))) {
+				if (!this.confirm(Utils._string("tmp_no_default"))) {
 					this.pickFile(chromeWin);
 				}
 			}
@@ -561,25 +585,19 @@ var gConvertTMPSession = {
 		file = fp.fileURL.spec;
 		try {
 			if (!this.convertFile(file)) {
-				this._prompt.alert(null, gSessionManager._string("sessionManager"), gSessionManager._string("ss_none"));
+				Services.prompt.alert(null, Utils._string("sessionManager"), Utils._string("ss_none"));
 			}
 		} catch (ex) {
 			report(ex);
 		}
 	},
 	
-	get _prompt() {
-		return Cc["@mozilla.org/embedcomp/prompt-service;1"]
-									 .getService(Ci.nsIPromptService);
-	},
-
 	confirm: function (aMsg) {
-		var promptService = this._prompt;
-		return promptService.confirmEx(null,
-									gSessionManager._string("sessionManager"),
+		return Services.prompt.confirmEx(null,
+									Utils._string("sessionManager"),
 									aMsg,
-									(promptService.BUTTON_TITLE_YES * promptService.BUTTON_POS_0)
-									+ (promptService.BUTTON_TITLE_NO * promptService.BUTTON_POS_1),
+									(Services.prompt.BUTTON_TITLE_YES * Services.prompt.BUTTON_POS_0)
+									+ (Services.prompt.BUTTON_TITLE_NO * Services.prompt.BUTTON_POS_1),
 									null, null, null, null, {});
 	},
 	
@@ -608,7 +626,7 @@ var gConvertTMPSession = {
 		if (!aInitialConvert) {
 			if(this.SessionManager.nodeHasArc("rdf:gSessionManager", "status")) {
 				this.selectAll = false;
-				rv = this.confirm(gSessionManager._string("ss_convert_again"));
+				rv = this.confirm(Utils._string("ss_convert_again"));
 			}
 			else {
 				this.SessionManager.setLiteral("rdf:gSessionManager", "status", "converted");
@@ -637,22 +655,23 @@ var gConvertTMPSession = {
 		var _count = 0;
 		
 		this.sessionList = [];
+		var matchArray;
 		for (var i in sessions.list) {
 			var nameExt = this.SessionManager.getLiteralValue(sessions.path[i], "nameExt");
 			if (nameExt) {
 				var winCount="", tabCount="";
 				// get window and tab counts
-				if (/(((\d+) W, )?(\d+) T)/m.test(nameExt)) {
-					winCount = RegExp.$3 ? RegExp.$3 : "1";
-					tabCount = RegExp.$4 ? RegExp.$4 : "";
+				if (matchArray = /(((\d+) W, )?(\d+) T)/m.exec(nameExt)) {
+					winCount = matchArray[3] ? matchArray[3] : "1";
+					tabCount = matchArray[4] ? matchArray[4] : "";
 				}
 		
 				var sessionListItem = { name: unescape(sessions.list[i]), fileName: sessions.list[i], autosave: false, windows: winCount, tabs: tabCount, group: "[Tabmix]" };
 				this.sessionList.push(sessionListItem);
 			}
 		}
-		var sessionsToConvert = gSessionManager.selectSession(gSessionManager._string("ss_select"), 
-																gSessionManager._string("ss_convert"), 
+		var sessionsToConvert = Utils.selectSession(Utils._string("ss_select"), 
+																Utils._string("ss_convert"), 
 																{ multiSelect: true, selectAll: this.selectAll }, 
 																gConvertTMPSession.getSessions
 															 );   
@@ -664,6 +683,7 @@ var gConvertTMPSession = {
 			convert[i] =  (sessionsToConvert.indexOf(sessions.list[i]) != -1)
 		}
 
+		var matchArray;
 		for (var i = 0; i < sessions.path.length; i++ ) {
 			if (!convert[i]) continue;
 			var sessionState = this.convertSession.getSessionState(sessions.path[i]);
@@ -680,25 +700,25 @@ var gConvertTMPSession = {
 				var timestamp = new Date(date).valueOf() + 3600*_time[0] + 60*_time[1] + 1*_time[2];
 				
 				// get window and tab counts
-				if (/(((\d+) W, )?(\d+) T)/m.test(nameExt)) {
-					winCount = RegExp.$3 ? RegExp.$3 : "1";
-					tabCount = RegExp.$4 ? RegExp.$4 : "";
+				if (matchArray = /(((\d+) W, )?(\d+) T)/m.exec(nameExt)) {
+					winCount = matchArray[3] ? matchArray[3] : "1";
+					tabCount = matchArray[4] ? matchArray[4] : "";
 				}
 			}
 			var sessionName = unescape(sessions.list[i]);
 			var name = sessionName + dateString;
-			var fileName = gSessionManager.makeFileName("Tabmix - " + sessionName + fileDate);
+			var fileName = Utils.makeFileName("Tabmix - " + sessionName + fileDate);
 
 			_count += this.save(sessionState, timestamp, name, fileName, winCount, tabCount);
 		}
 
 		var msg;
 		if (_count == 0) {
-			this._prompt.alert(null, gSessionManager._string("sessionManager"), gSessionManager._string("tmp_unable"));
+			Services.prompt.alert(null, Utils._string("sessionManager"), Utils._string("tmp_unable"));
 			return;
 		}
-		var msg = (_count > 1)?(_count + " " + gSessionManager._string("tmp_many")):gSessionManager._string("tmp_one");
-		this._prompt.alert(null, gSessionManager._string("sessionManager"), msg);
+		var msg = (_count > 1)?(_count + " " + Utils._string("tmp_many")):Utils._string("tmp_one");
+		Services.prompt.alert(null, Utils._string("sessionManager"), msg);
 	},
 	
 	save: function (aSession, aTimestamp, aName, aFileName, winCount, tabCount) {
@@ -709,11 +729,11 @@ var gConvertTMPSession = {
 			aSession.session = { state:"stop" };
 		var oState = "[SessionManager v2]\nname=" + aName + "\ntimestamp=" + aTimestamp + "\nautosave=false\tcount=" +
 					 winCount + "/" + tabCount + "\tgroup=[Tabmix]\n" + 
-					 gSessionManager.decryptEncryptByPreference(gSessionManager.JSON_encode(aSession));
-		var file = gSessionManager.getSessionDir(gSessionManager.makeFileName(aName));
+					 Utils.decryptEncryptByPreference(Utils.JSON_encode(aSession));
+		var file = SessionIo.getSessionDir(Utils.makeFileName(aName));
 		try {
-			var file = gSessionManager.getSessionDir(aFileName, true);
-			gSessionManager.writeFile(file, oState);
+			var file = SessionIo.getSessionDir(aFileName, true);
+			SessionIo.writeFile(file, oState);
 		}
 		catch (ex) {
 			report(ex);
@@ -721,4 +741,316 @@ var gConvertTMPSession = {
 		}
 		return true;
 	}
+}
+
+var oldFormatConverter = {
+/* ........ Conversion functions .............. */
+
+	convertEntryToLatestSessionFormat: function(aEntry)
+	{
+		// Convert Postdata
+		if (aEntry.postdata) {
+			aEntry.postdata_b64 = btoa(aEntry.postdata);
+		}
+		delete aEntry.postdata;
+	
+		// Convert owner
+		if (aEntry.ownerURI) {
+			let uriObj = Services.io.newURI(aEntry.ownerURI, null, null);
+			let owner = Cc["@mozilla.org/scriptsecuritymanager;1"].getService(Ci.nsIScriptSecurityManager).getCodebasePrincipal(uriObj);
+			try {
+				let binaryStream = Cc["@mozilla.org/binaryoutputstream;1"].
+								   createInstance(Ci.nsIObjectOutputStream);
+				let pipe = Cc["@mozilla.org/pipe;1"].createInstance(Ci.nsIPipe);
+				pipe.init(false, false, 0, 0xffffffff, null);
+				binaryStream.setOutputStream(pipe.outputStream);
+				binaryStream.writeCompoundObject(owner, Ci.nsISupports, true);
+				binaryStream.close();
+
+				// Now we want to read the data from the pipe's input end and encode it.
+				let scriptableStream = Cc["@mozilla.org/binaryinputstream;1"].createInstance(Ci.nsIBinaryInputStream);
+				scriptableStream.setInputStream(pipe.inputStream);
+				let ownerBytes = scriptableStream.readByteArray(scriptableStream.available());
+				// We can stop doing base64 encoding once our serialization into JSON
+				// is guaranteed to handle all chars in strings, including embedded
+				// nulls.
+				aEntry.owner_b64 = btoa(String.fromCharCode.apply(null, ownerBytes));
+			}
+			catch (ex) { logError(ex); }
+		}
+		delete aEntry.ownerURI;
+	
+		// convert children
+		if (aEntry.children) {
+			for (var i = 0; i < aEntry.children.length; i++) {
+				//XXXzpao Wallpaper patch for bug 514751
+				if (!aEntry.children[i].url)
+					continue;
+				aEntry.children[i] = this.convertEntryToLatestSessionFormat(aEntry.children[i]);
+			}
+		}
+		
+		return aEntry;
+	},
+	
+	convertTabToLatestSessionFormat: function(aTab)
+	{
+		// Convert XULTAB to attributes
+		if (aTab.xultab) {
+			if (!aTab.attributes) aTab.attributes = {};
+			// convert attributes from the legacy Firefox 2.0/3.0 format
+			let matchArray;
+			aTab.xultab.split(" ").forEach(function(aAttr) {
+				if (matchArray = /^([^\s=]+)=(.*)/.exec(aAttr)) {
+					aTab.attributes[matchArray[1]] = matchArray[2];
+				}
+			}, this);
+		}
+		delete aTab.xultab;
+
+		// Convert text data
+		if (aTab.text) {
+			if (!aTab.formdata) aTab.formdata = {};
+			let textArray = aTab.text ? aTab.text.split(" ") : [];
+			let matchArray;
+			textArray.forEach(function(aTextEntry) {
+				if (matchArray = /^((?:\d+\|)*)(#?)([^\s=]+)=(.*)$/.exec(aTextEntry)) {
+					let key = matchArray[2] ? "#" + matchArray[3] : "//*[@name='" + matchArray[3] + "']";
+					aTab.formdata[key] = matchArray[4];
+				}
+			});
+		}
+		delete aTab.text;
+		
+		// Loop and convert entries
+		aTab.entries.forEach(function(aEntry) {
+			aEntry = this.convertEntryToLatestSessionFormat(aEntry);
+		}, this);
+		
+		return aTab;
+	},
+	
+	convertWindowToLatestSessionFormat: function(aWindow)
+	{
+		// Loop tabs
+		aWindow.tabs.forEach(function(aTab) {
+			aTab = this.convertTabToLatestSessionFormat(aTab);
+		}, this);
+		
+		// Loop closed tabs
+		if (aWindow._closedTabs) {
+			aWindow._closedTabs.forEach(function(aTab) {
+				aTab.state = this.convertTabToLatestSessionFormat(aTab.state);
+			}, this);
+		}
+		return aWindow;
+	},
+
+	convertToLatestSessionFormat: function(aFile, aState)
+	{
+		log("Converting " + aFile.leafName + " to latest format", "TRACE");
+		
+		let state = aState.split("\n");
+		// decrypt if encrypted, do not decode if in old format since old format was not encoded
+		state[4] = Utils.decrypt(state[4], true);
+		
+		// convert to object
+		state[4] = Utils.JSON_decode(state[4], true);
+		
+		// Loop and convert windows
+		state[4].windows.forEach(function(aWindow) {
+			aWindow = this.convertWindowToLatestSessionFormat(aWindow);
+		}, this);
+
+		// Loop and convert closed windows
+		if (state[4]._closedWindows) {
+			state[4]._closedWindows.forEach(function(aWindow) {
+				aWindow = this.convertWindowToLatestSessionFormat(aWindow);
+			}, this);
+		}
+		
+		// replace state
+		state[4] = Utils.JSON_encode(state[4]);
+		state[4] = Utils.decryptEncryptByPreference(state[4], true, true);
+		state = state.join("\n");
+		
+		// Make a backup of old session in case something goes wrong
+		try {
+			if (aFile.exists()) 
+			{
+				let newFile = aFile.clone();
+				SessionIo.moveToFolder(newFile, Utils._string("older_format_sessions_folder"));
+			}
+		}	
+		catch (ex) { 
+			logError(ex); 
+		}
+		
+		// Save session
+		SessionIo.writeFile(aFile, state);
+
+		return state;
+	},
+
+	decodeOldFormat: function(aIniString, moveClosedTabs)
+	{
+		let rootObject = {};
+		let obj = rootObject;
+		let lines = aIniString.split("\n");
+	
+		for (let i = 0; i < lines.length; i++)
+		{
+			try
+			{
+				if (lines[i].charAt(0) == "[")
+				{
+					obj = this.ini_getObjForHeader(rootObject, lines[i]);
+				}
+				else if (lines[i] && lines[i].charAt(0) != ";")
+				{
+					this.ini_setValueForLine(obj, lines[i]);
+				}
+			}
+			catch (ex)
+			{
+				throw new Error("Error at line " + (i + 1) + ": " + ex.description);
+			}
+		}
+	
+		// move the closed tabs to the right spot
+		if (moveClosedTabs == true)
+		{
+			try
+			{
+				rootObject.windows.forEach(function(aValue, aIndex) {
+					if (aValue.tabs && aValue.tabs[0]._closedTabs)
+					{
+						aValue["_closedTabs"] = aValue.tabs[0]._closedTabs;
+						delete aValue.tabs[0]._closedTabs;
+					}
+				}, this);
+			}
+			catch (ex) {}
+		}
+	
+		return rootObject;
+	},
+
+	ini_getObjForHeader: function(aObj, aLine)
+	{
+		let matchArray;
+		let names = aLine.split("]")[0].substr(1).split(".");
+	
+		for (let i = 0; i < names.length; i++)
+		{
+			if (!names[i])
+			{
+				throw new Error("Invalid header: [" + names.join(".") + "]!");
+			}
+			if (matchArray = /(\d+)$/.exec(names[i]))
+			{
+				names[i] = names[i].slice(0, -matchArray[1].length);
+				let ix = parseInt(matchArray[1]) - 1;
+				names[i] = this.ini_fixName(names[i]);
+				aObj = aObj[names[i]] = aObj[names[i]] || [];
+				aObj = aObj[ix] = aObj[ix] || {};
+			}
+			else
+			{
+				names[i] = this.ini_fixName(names[i]);
+				aObj = aObj[names[i]] = aObj[names[i]] || {};
+			}
+		}
+	
+		return aObj;
+	},
+
+	ini_setValueForLine: function(aObj, aLine)
+	{
+		let ix = aLine.indexOf("=");
+		if (ix < 1)
+		{
+			throw new Error("Invalid entry: " + aLine + "!");
+		}
+	
+		let value = aLine.substr(ix + 1);
+		if (value == "true" || value == "false")
+		{
+			value = (value == "true");
+		}
+		else if (/^\d+$/.test(value))
+		{
+			value = parseInt(value);
+		}
+		else if (value.indexOf("%") > -1)
+		{
+			value = decodeURI(value.replace(/%3B/gi, ";"));
+		}
+		
+		let name = this.ini_fixName(aLine.substr(0, ix));
+		if (name == "xultab")
+		{
+			//this.ini_parseCloseTabList(aObj, value);
+		}
+		else
+		{
+			aObj[name] = value;
+		}
+	},
+
+	// This results in some kind of closed tab data being restored, but it is incomplete
+	// as all closed tabs show up as "undefined" and they don't restore.  If someone
+	// can fix this feel free, but since it is basically only used once I'm not going to bother.
+	ini_parseCloseTabList: function(aObj, aCloseTabData)
+	{
+		let matchArray;
+		let ClosedTabObject = {};
+		let ix = aCloseTabData.indexOf("=");
+		if (ix < 1)
+		{
+			throw new Error("Invalid entry: " + aCloseTabData + "!");
+		}
+		let serializedTabs = aCloseTabData.substr(ix + 1);
+		serializedTabs = decodeURI(serializedTabs.replace(/%3B/gi, ";"));
+		let closedTabs = serializedTabs.split("\f\f").map(function(aData) {
+			if (matchArray = /^(\d+) (.*)\n([\s\S]*)/.exec(aData))
+			{
+				return { name: matchArray[2], pos: parseInt(matchArray[1]), state: matchArray[3] };
+			}
+			return null;
+		}).filter(function(aTab) { return aTab != null; }).slice(0, PreferenceManager.get("browser.sessionstore.max_tabs_undo", 10, true));
+
+		closedTabs.forEach(function(aValue, aIndex) {
+			closedTabs[aIndex] = this.decodeOldFormat(aValue.state, false)
+			closedTabs[aIndex] = closedTabs[aIndex].windows;
+			closedTabs[aIndex] = closedTabs[aIndex][0].tabs;
+		}, this);
+
+		aObj["_closedTabs"] = [];
+
+		closedTabs.forEach(function(aValue, aIndex) {
+			aObj["_closedTabs"][aIndex] = Utils.JSON_decode({ state : Utils.JSON_encode(aValue[0]) });
+		}, this);
+	},
+
+	ini_fixName: function(aName)
+	{
+		switch (aName)
+		{
+			case "Window":
+				return "windows";
+			case "Tab":
+				return "tabs";
+			case "Entry":
+				return "entries";
+			case "Child":
+				return "children";
+			case "Cookies":
+				return "cookies";
+			case "uri":
+				return "url";
+			default:
+				return aName;
+		}			
+	},
 }

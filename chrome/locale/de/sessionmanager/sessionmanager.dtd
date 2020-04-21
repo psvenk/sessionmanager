@@ -10,7 +10,7 @@
 <!ENTITY abandonSession.accesskey "v">
 <!ENTITY rename.label "Sitzung umbenennen…">
 <!ENTITY rename.accesskey "u">
-<!ENTITY remove.label "Sitzung(en) löschen…">
+<!ENTITY remove.label "Sitzung löschen…">
 <!ENTITY remove.accesskey "c">
 <!ENTITY openFolder.label "Sitzungs-Ordner öffnen…">
 <!ENTITY openFolder.accesskey "O">
@@ -52,7 +52,7 @@
 <!ENTITY remove_group.label "Gruppe löschen…">
 <!ENTITY change_group.label "Gruppe ändern…">
 <!ENTITY change_group.accesskey "d">
-<!ENTITY group.label "Sitzung(en) gruppieren…">
+<!ENTITY group.label "Sitzungen gruppieren…">
 <!ENTITY group.accesskey "g">
 <!ENTITY toolbar.menu.tooltip "Menü zur Sitzungs-Verwaltung öffnen">
 <!ENTITY toolbar.undo.menu.tooltip "Menü für kürzlich geschlossene Fenster und Tabs öffnen">
@@ -60,13 +60,12 @@
 <!ENTITY prompt.save_every2.label "Minuten sichern (deaktiviert wenn leer)">
 <!ENTITY winTabTree.restoreHeader "Wiederherstellen">
 <!ENTITY winTabTree.listHeader "Fenster und Tabs">
-<!--     LOCALIZATION NOTE: &#37;S will be replaced with a number.     -->
 <!ENTITY winTabTree.windowLabel "Fenster &#37;S">
 <!ENTITY load.label "Sitzung laden...">
 <!ENTITY load.accesskey "l">
 <!ENTITY prompt.append.label "Zu bestehender Sitzung hinzufügen">
 <!ENTITY prompt.replace.label "Sitzung ersetzen">
-<!ENTITY ctrl_click_note.label "Hinweis: Klicken auf einen Tab-Eintrag mit gedrückter Strg-Taste öffnet den Tab direkt im bestehenden Fenster.">
+<!ENTITY tab_open_click_note.label "Hinweis: Klicken auf einen Tab-Eintrag mit gedrückter Alt-Taste öffnet den Tab direkt im bestehenden Fenster.">
 <!ENTITY select_all.label "Alle auswählen">
 <!ENTITY select_none.label "Keine auswählen">
 <!ENTITY toggle_selection.label "Auswahl umkehren">
@@ -95,3 +94,12 @@
 <!ENTITY empty_trash.accesskey "A">
 <!ENTITY permanently_delete.label "Sitzung unwiderruflich löschen">
 <!ENTITY permanently_delete.accesskey "u">
+<!ENTITY search.label "Suchen...">
+<!ENTITY edit.label "Sitzung bearbeiten...">
+<!ENTITY edit.accesskey "b">
+<!ENTITY addtab.label "Tab zur Sitzung hinzufügen...">
+<!ENTITY addtab.accesskey "T">
+<!ENTITY viewcontents.label "Inhalt der Sitzung anzeigen">
+<!ENTITY viewcontents.accesskey "I">
+<!ENTITY export_to_html.label "Inhalt der Sitzung in eine Lesezeichen-HTML-Datei exportieren">
+<!ENTITY export_to_html.accesskey "h">

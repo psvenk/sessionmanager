@@ -60,13 +60,12 @@
 <!ENTITY prompt.save_every2.label "dakika (boş ise devre dışıdır)">
 <!ENTITY winTabTree.restoreHeader "Geri yükle">
 <!ENTITY winTabTree.listHeader "Pencereler ve Sekmeler">
-<!-- LOCALIZATION NOTE: &#37;S will be replaced with a number. -->
 <!ENTITY winTabTree.windowLabel "Pencere &#37;S">
 <!ENTITY load.label "Oturum Yükle...">
 <!ENTITY load.accesskey "L">
 <!ENTITY prompt.append.label "Oturuma Ekle">
 <!ENTITY prompt.replace.label "Oturum Değiştir">
-<!ENTITY ctrl_click_note.label "Not:Bir sekmeye tıklayıp CTRL tuşu basılı olduğu halde aşağı sürüklerseniz, o sekme hali hazırdaki pencerede açılır.">
+<!ENTITY tab_open_click_note.label "Not:Bir sekmeye tıklayıp ALT tuşu basılı olduğu halde aşağı sürüklerseniz, o sekme hali hazırdaki pencerede açılır.">
 <!ENTITY select_all.label "Tümünü Seç">
 <!ENTITY select_none.label "Seçim Yok">
 <!ENTITY toggle_selection.label "Seçimi değiştir">
@@ -75,15 +74,15 @@
 <!ENTITY session_explorer.label "Oturum Gezgini">
 <!ENTITY session_explorer.accesskey "E">
 <!ENTITY closeWindowSession.label "Pencere Oturumunu Kaydet ve Kapat">
-<!ENTITY closeWindowSession.accesskey "l">
+<!ENTITY closeWindowSession.accesskey "I">
 <!ENTITY abandonWindowSession.label "Pencere Oturumunu iptal et">
 <!ENTITY abandonWindowSession.accesskey "b">
 <!ENTITY load_append_window.label "Yükle(Şimdiki Pencereye Ekle)">
 <!ENTITY load_append_window.accesskey "i">
 <!ENTITY leave_window_open.label "Bu pencereyi açmaya dön">
-<!ENTITY clearTabList.label "Kapatılan'Sekme Listesini'Temizle...">
+<!ENTITY clearTabList.label "Kapatılan 'Sekme Listesini' Temizle...">
 <!ENTITY clearTabList.accesskey "T">
-<!ENTITY clearWindowList.label "Kapatılan'Pencere Listesini'Temizle..">
+<!ENTITY clearWindowList.label "Kapatılan 'Pencere Listesini' Temizle..">
 <!ENTITY clearWindowList.accesskey "W">
 <!ENTITY hidden.label "Gizli">
 <!ENTITY contribute.label "Katkıda bulunanlar">

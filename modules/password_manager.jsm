@@ -1,23 +1,20 @@
+"use strict";
+
 var EXPORTED_SYMBOLS = ["PasswordManager"];
 
 const Cc = Components.classes;
 const Ci = Components.interfaces;
-const Cu = Components.utils;
-const Cr = Components.results;
 
 const HOSTNAME = "chrome://sessionmanager";
 const USERNAME = "private-key-password";
 const REALM = "Passphrase";
 
 // Get lazy getter functions from XPCOMUtils
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
-
-// import logger module
-Cu.import("resource://sessionmanager/modules/logger.jsm");
+Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+Components.utils.import("resource://gre/modules/Services.jsm");
 
 // Lazily define services
-XPCOMUtils.defineLazyServiceGetter(this, "LOGIN_MANAGER", "@mozilla.org/login-manager;1", "nsILoginManager");
-XPCOMUtils.defineLazyServiceGetter(this, "SECRET_DECODER_RING_SERVICE", "@mozilla.org/security/sdr;1", "nsISecretDecoderRing");
+XPCOMUtils.defineLazyServiceGetter(this, "secret_decoder_ring_service", "@mozilla.org/security/sdr;1", "nsISecretDecoderRing");
 
 var PasswordManager = {
 	get password() 
@@ -32,22 +29,22 @@ var PasswordManager = {
 		let newLogin = Cc["@mozilla.org/login-manager/loginInfo;1"].createInstance(Ci.nsILoginInfo);
 		newLogin.init(HOSTNAME, null, REALM, USERNAME, aPassword, "", "");
 		if (oldLogin) {
-			LOGIN_MANAGER.modifyLogin(oldLogin, newLogin);
+			Services.logins.modifyLogin(oldLogin, newLogin);
 		}
 		else {
-			LOGIN_MANAGER.addLogin(newLogin);
+			Services.logins.addLogin(newLogin);
 		}
 	},
 	
 	clearPassword: function()
 	{
 		let login = findPasswordLogin();
-		if (login) LOGIN_MANAGER.removeLogin(login);
+		if (login) Services.logins.removeLogin(login);
 	},
 	
 	findPasswordLogin: function()
 	{
-		let logins = LOGIN_MANAGER.findLogins({}, HOSTNAME, null, REALM);
+		let logins = Services.logins.findLogins({}, HOSTNAME, null, REALM);
 		for (let i = 0; i < logins.length; i++) {
 			if (logins[i].username == USERNAME) {
 				return logins[i];
@@ -74,7 +71,7 @@ var PasswordManager = {
 	{
 		//encrypting a string should open the enter master password dialog if master password is set
 		try {
-			SECRET_DECODER_RING_SERVICE.encryptString("dummy");
+			secret_decoder_ring_service.encryptString("dummy");
 			return true;
 		}
 		catch(ex) {
@@ -82,3 +79,6 @@ var PasswordManager = {
 		}
 	}
 };
+
+// Don't allow changing
+Object.freeze(PasswordManager);

@@ -39,7 +39,7 @@
 <!ENTITY remove_one.label "Odstranit relaci...">
 <!ENTITY set_startup.label "Nastavit jako relaci při spuštění">
 <!ENTITY set_startup.accesskey "s">
-<!ENTITY openSessionManagerSidebar.commandkey "S">
+<!ENTITY openSessionManagerSidebar.commandkey "s">
 <!ENTITY session_name.label "Název">
 <!ENTITY session_windows.label "Okna">
 <!ENTITY session_tabs.label "Panely">
@@ -60,13 +60,12 @@
 <!ENTITY prompt.save_every2.label "minut (prázdné pole vypne funkci)">
 <!ENTITY winTabTree.restoreHeader "Obnovit">
 <!ENTITY winTabTree.listHeader "Okna a panely">
-<!-- LOCALIZATION NOTE: &#37;S will be replaced with a number. -->
 <!ENTITY winTabTree.windowLabel "Okno č. &#37;S">
 <!ENTITY load.label "Načíst relaci...">
 <!ENTITY load.accesskey "l">
 <!ENTITY prompt.append.label "Připojit k relaci">
 <!ENTITY prompt.replace.label "Nahradit relaci">
-<!ENTITY ctrl_click_note.label "Poznámka: klepnutí na panel za současného držení klávesy CTRL otevře tento panel v existujícím okně.">
+<!ENTITY tab_open_click_note.label "Poznámka: klepnutí na panel za současného držení klávesy Alt otevře tento panel v existujícím okně.">
 <!ENTITY select_all.label "Vybrat vše">
 <!ENTITY select_none.label "Zrušit výběr">
 <!ENTITY toggle_selection.label "Invertovat výběr">
@@ -77,7 +76,7 @@
 <!ENTITY closeWindowSession.label "Uložit a zavřít okno relace">
 <!ENTITY closeWindowSession.accesskey "l">
 <!ENTITY abandonWindowSession.label "Přerušit relaci v okně">
-<!ENTITY abandonWindowSession.accesskey "b">
+<!ENTITY abandonWindowSession.accesskey "k">
 <!ENTITY load_append_window.label "Načíst (přidat k aktuálnímu oknu)">
 <!ENTITY load_append_window.accesskey "i">
 <!ENTITY leave_window_open.label "Ponechat toto okno otevřené">
@@ -101,6 +100,6 @@
 <!ENTITY addtab.label "Přidat do relace panel...">
 <!ENTITY addtab.accesskey "a">
 <!ENTITY viewcontents.label "Zobrazit obsah relace">
-<!ENTITY viewcontents.accesskey "V">
+<!ENTITY viewcontents.accesskey "h">
 <!ENTITY export_to_html.label "Exportovat obsah relace jako záložku ve formátu HTML">
 <!ENTITY export_to_html.accesskey "E">

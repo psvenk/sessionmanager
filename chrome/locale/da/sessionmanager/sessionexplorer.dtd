@@ -2,10 +2,8 @@
 <!ENTITY session_open.accesskey "b">
 <!ENTITY session_open.tooltip "Åbn valgte session">
 <!ENTITY session_open_overwrite.label "Åbn (overskriv)">
-<!ENTITY session_open_overwrite.accesskey "v">
 <!ENTITY session_open_overwrite.tooltip "Åbn valgte session ???">
 <!ENTITY session_open_newwindow.label "Åbn (nyt vindue)">
-<!ENTITY session_open_newwindow.accesskey "n">
 <!ENTITY session_open_newwindow.tooltip "Åbn valgte session ???">
 <!ENTITY session_open_append.label "Åbn (tilføj)">
 <!ENTITY session_open_append.accesskey "t">

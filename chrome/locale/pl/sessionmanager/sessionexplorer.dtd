@@ -1,5 +1,4 @@
 <!ENTITY session_open.label "Otwórz">
-<!ENTITY session_open.accesskey "O">
 <!ENTITY session_open.tooltip "Otwiera wybraną sesję">
 <!ENTITY session_open_overwrite.label "Otwórz (nadpisz)">
 <!ENTITY session_open_overwrite.accesskey "T">
@@ -28,7 +27,6 @@
 <!ENTITY session_open_folder.label "Otwórz folder">
 <!ENTITY session_open_folder.accesskey "D">
 <!ENTITY session_open_folder.tooltip "Otwiera folder menedżera sesji">
-<!ENTITY column_autosave.label "A">
 <!ENTITY column_autosave.tooltip "Zapisz sesję automatycznie">
 <!ENTITY column_windows.label "O">
 <!ENTITY column_windows.tooltip "Okna">

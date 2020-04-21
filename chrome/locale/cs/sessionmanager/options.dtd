@@ -139,7 +139,7 @@
 <!ENTITY use_browser_crash_prompt.label "Po pádu aplikace použít dialog pro obnovu panelů a oken vestavěný v prohlížeči">
 <!ENTITY use_browser_crash_prompt.accesskey "u">
 <!ENTITY reset_warnings.label "Obnovit zobrazování varování">
-<!ENTITY reset_warnings.accesskey "R">
+<!ENTITY reset_warnings.accesskey "r">
 <!ENTITY export_settings.label "Nastavení exportu">
 <!ENTITY export_settings.accesskey "x">
 <!ENTITY import_settings.label "Nastavení importu">
@@ -172,7 +172,7 @@
 <!ENTITY replace_with_name_replace.label "nahradí stávající název relace názvem v textovém boxu">
 <!ENTITY replace_with_name_keep.label "zachová stávající název relace">
 <!ENTITY show_icon_in_menu.label "Zobrazit ikonu v nabídce nástrojů">
-<!ENTITY show_icon_in_menu.accesskey "I">
+<!ENTITY show_icon_in_menu.accesskey "i">
 <!ENTITY set_encryption_password.label "Zadejte heslo, kterým ochráníte šifrovací klíč k relaci">
 <!ENTITY set_encryption_password.accesskey "e">
 <!ENTITY change_encryption_key_password.label "Změnit heslo k šifrovacímu klíči">
@@ -180,13 +180,13 @@
 <!ENTITY save_encryption_key.label "Uložit heslo k šifrovacímu klíči ve Správci hesel v prohlížeči">
 <!ENTITY save_encryption_key.accesskey "s">
 <!ENTITY restore_hidden_tabs.label "Obnovit skryté panely">
-<!ENTITY restore_hidden_tabs.accesskey "H">
+<!ENTITY restore_hidden_tabs.accesskey "y">
 <!ENTITY display_menus_in_submenu.label "Zobrazit položky nabídky Správce relací v podnabídce">
 <!ENTITY display_menus_in_submenu.accesskey "d">
 <!ENTITY use_sql_cache.label "Přednačítat základní data relace na disk. Umožňuje vyhledávání uvnitř relací">
 <!ENTITY use_sql_cache.accesskey "c">
 <!ENTITY rebuild_cache.label "Znovu sestavit přednačtená data">
-<!ENTITY rebuild_cache.accesskey "R">
+<!ENTITY rebuild_cache.accesskey "Z">
 <!ENTITY log_level_error.label "Zaznamenávat chyby">
 <!ENTITY log_level_error.accesskey "e">
 <!ENTITY allow_duplicates.label "Povolit relaci se stejným názvem jako má již existující relace">

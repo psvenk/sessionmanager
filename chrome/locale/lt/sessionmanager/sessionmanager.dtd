@@ -1,13 +1,11 @@
 <!ENTITY sessionManager "Sesijų tvarkytojas">
 <!ENTITY toolsmenu.accesskey "t">
 <!ENTITY save.label "Saugoti sesiją...">
-<!ENTITY save.accesskey "S">
 <!ENTITY saveOne.label "Saugoti šį langą...">
 <!ENTITY saveOne.accesskey "l">
 <!ENTITY closeSession.label "Išsaugoti ir užverti dabartinę sesiją">
 <!ENTITY closeSession.accesskey "s">
 <!ENTITY abandonSession.label "Atsisakyti dabartinės sesijos">
-<!ENTITY abandonSession.accesskey "A">
 <!ENTITY rename.label "Pervardyti sesiją...">
 <!ENTITY rename.accesskey "P">
 <!ENTITY remove.label "Trinti sesiją(-as)...">

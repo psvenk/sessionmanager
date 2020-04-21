@@ -24,6 +24,7 @@ pref("extensions.{1280606b-2510-4fe0-97ef-9b5a22eafe30}.max_backup_keep", 10);
 pref("extensions.{1280606b-2510-4fe0-97ef-9b5a22eafe30}.max_closed_undo", 10);
 pref("extensions.{1280606b-2510-4fe0-97ef-9b5a22eafe30}.max_display", -1);
 pref("extensions.{1280606b-2510-4fe0-97ef-9b5a22eafe30}.name_format", "%40t-%d");
+pref("extensions.{1280606b-2510-4fe0-97ef-9b5a22eafe30}.no_splitmenu", false);
 pref("extensions.{1280606b-2510-4fe0-97ef-9b5a22eafe30}.options_selected_tab", 0);
 pref("extensions.{1280606b-2510-4fe0-97ef-9b5a22eafe30}.overwrite", true);
 pref("extensions.{1280606b-2510-4fe0-97ef-9b5a22eafe30}.preselect_previous_session", false);

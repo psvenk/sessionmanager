@@ -1,5 +1,3 @@
-<!ENTITY sessionManager "Session Manager">
-<!ENTITY toolsmenu.accesskey "M">
 <!ENTITY save.label "Gem session...">
 <!ENTITY save.accesskey "s">
 <!ENTITY saveOne.label "Gem vindue...">
@@ -39,12 +37,10 @@
 <!ENTITY remove_one.label "Slet session...">
 <!ENTITY set_startup.label "Sæt som opstartssession">
 <!ENTITY set_startup.accesskey "s">
-<!ENTITY openSessionManagerSidebar.commandkey "S">
 <!ENTITY session_name.label "Navn">
 <!ENTITY session_windows.label "Vinduer">
 <!ENTITY session_tabs.label "Faneblade">
 <!ENTITY backup_sessions.label "Backup-sessioner">
-<!ENTITY backup_sessions.accesskey "B">
 <!ENTITY remove_item.label "Slet element">
 <!ENTITY remove_item.accesskey "e">
 <!ENTITY session_group.label "Gruppe">
@@ -53,20 +49,18 @@
 <!ENTITY change_group.label "Redigér gruppe...">
 <!ENTITY change_group.accesskey "R">
 <!ENTITY group.label "Gruppe-Session(er)...">
-<!ENTITY group.accesskey "G">
 <!ENTITY toolbar.menu.tooltip "Åbn sessionsadministrationsmenu">
 <!ENTITY toolbar.undo.menu.tooltip "Åbn nyligt lukkede vinduer og faneblade-menu">
 <!ENTITY prompt.save_every1.label "Gem hver">
 <!ENTITY prompt.save_every2.label "minutter (deaktiveret hvis tom)">
 <!ENTITY winTabTree.restoreHeader "Genetabler">
 <!ENTITY winTabTree.listHeader "Vinduer og Faneblade">
-<!-- LOCALIZATION NOTE: &#37;S will be replaced with a number. -->
 <!ENTITY winTabTree.windowLabel "Vindue &#37;S">
 <!ENTITY load.label "Indlæs session...">
 <!ENTITY load.accesskey "l">
 <!ENTITY prompt.append.label "Tilføj til session">
 <!ENTITY prompt.replace.label "Erstat session">
-<!ENTITY ctrl_click_note.label "Bemærk: klik på et fanebladselement med Ctrl-tasten nede vil åbne pågældende faneblad i det eksisterende vindue.">
+<!ENTITY tab_open_click_note.label "Bemærk: klik på et fanebladselement med Alt-tasten nede vil åbne pågældende faneblad i det eksisterende vindue.">
 <!ENTITY select_all.label "Vælg alle">
 <!ENTITY select_none.label "Vælg ingen">
 <!ENTITY toggle_selection.label "Inverter valg">
@@ -75,7 +69,6 @@
 <!ENTITY session_explorer.label "Sessions-stifinder">
 <!ENTITY session_explorer.accesskey "e">
 <!ENTITY closeWindowSession.label "Gem og luk vindue-session">
-<!ENTITY closeWindowSession.accesskey "l">
 <!ENTITY abandonWindowSession.label "Opgiv vindue-session">
 <!ENTITY abandonWindowSession.accesskey "O">
 <!ENTITY load_append_window.label "Indlæs (tilføj til nuværende vindue)">

@@ -280,15 +280,15 @@
 			<groupbox>
 				<caption label="&sessionImport.caption;"/>
 				<hbox>
-					<button label="&importTMP.label;" accesskey="&importTMP.accesskey;" oncommand="com.morac.SessionManagerAddon.gConvertTMPSession.init();"/>
-					<button label="&importSS.label;" accesskey="&importSS.accesskey;" oncommand="com.morac.SessionManagerAddon.gSessionSaverConverter.init();"/>
+					<button label="&importTMP.label;" accesskey="&importTMP.accesskey;" oncommand="SessionConverter.convertTMP();"/>
+					<button label="&importSS.label;" accesskey="&importSS.accesskey;" oncommand="SessionConverter.convertSessionSaver();"/>
 				</hbox>
 			</groupbox>
 			<groupbox>
 				<caption label="&settingsImportExport.caption;"/>
 				<hbox>
-					<button label="&import_settings.label;" accesskey="&import_settings.accesskey;" oncommand="com.morac.SessionManagerAddon.gPreferenceManager.import();"/>
-					<button label="&export_settings.label;" accesskey="&export_settings.accesskey;" oncommand="com.morac.SessionManagerAddon.gPreferenceManager.export();"/>
+					<button label="&import_settings.label;" accesskey="&import_settings.accesskey;" oncommand="PreferenceManager.import();"/>
+					<button label="&export_settings.label;" accesskey="&export_settings.accesskey;" oncommand="PreferenceManager.export();"/>
 				</hbox>
 			</groupbox>
 		</hbox>
@@ -416,9 +416,9 @@
 			</columns>
 			<rows>
 				<row>
-					<checkbox label="&use_sql_cache.label;" accesskey="&use_sql_cache.accesskey;" preference="preference.use_SQLite_cache"/>
+					<checkbox label="&use_sql_cache.label;" id="use_sql_cache" accesskey="&use_sql_cache.accesskey;" preference="preference.use_SQLite_cache"/>
 					<button id="rebuild_cache_button" label="&rebuild_cache.label;" accesskey="&rebuild_cache.accesskey;" 
-					        oncommand="com.morac.SessionManagerAddon.gSQLManager.updateSQLCache(true);"/>
+					        oncommand="gSQLManager.rebuildCache();"/>
 				</row>
 				<row>
 					<checkbox label="&update_message.label;" accesskey="&update_message.accesskey;" preference="preference.update_message"/>
@@ -426,7 +426,7 @@
 			</rows>
 		</grid>
 		<separator style="height: 0.5em;" orient="vertical"/>				  
-		<button label="&reset_warnings.label;" accesskey="&reset_warnings.accesskey;" oncommand="com.morac.SessionManagerAddon.gPreferenceManager.resetWarningPrompts();"/>				  
+		<button label="&reset_warnings.label;" accesskey="&reset_warnings.accesskey;" oncommand="PreferenceManager.resetWarningPrompts();"/>				  
 	</prefpane>
 
 	<!-- ********************************************** -->
@@ -488,8 +488,8 @@
 			<hbox>
 				<checkbox flex="1" label="&enable_logging.label;" accesskey="&enable_logging.accesskey;" preference="preference.logging"
 						  id="enable_logging" oncommand="updateLogCheckboxes(this.checked);"/>
-				<button label="&open_log.label;" accesskey="&open_log.accesskey;" oncommand="com.morac.SessionManagerAddon.openLogFile();"/>
-				<button label="&delete_log.label;" accesskey="&delete_log.accesskey;" oncommand="com.morac.SessionManagerAddon.deleteLogFile(true);"/>
+				<button label="&open_log.label;" accesskey="&open_log.accesskey;" oncommand="openLogFile();"/>
+				<button label="&delete_log.label;" accesskey="&delete_log.accesskey;" oncommand="deleteLogFile(true);"/>
 			</hbox>
 			<vbox id="loggingCategories">
 				<checkbox label="&logging_to_console.label;" accesskey="&logging_to_console.accesskey;" preference="preference.logging_to_console"

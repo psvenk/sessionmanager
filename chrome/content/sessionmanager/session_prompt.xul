@@ -14,31 +14,27 @@
 	xhtml2:role="wairole:alert"
 	id="sessionmanagerPrompt"
 	title="&sessionManager;"
-	onload="com.morac.SessionManagerAddon.gSessionManagerSessionPrompt.onLoad();"
-	onunload="com.morac.SessionManagerAddon.gSessionManagerSessionPrompt.onUnload();"
-	ondialogaccept="return com.morac.SessionManagerAddon.gSessionManagerSessionPrompt.onAcceptDialog(false);"
-	ondialogextra1="return com.morac.SessionManagerAddon.gSessionManagerSessionPrompt.onAcceptDialog(true);"
-	onresize="com.morac.SessionManagerAddon.gSessionManagerSessionPrompt.resize();"
+	onload="gSessionManagerSessionPrompt.onLoad();"
+	onunload="gSessionManagerSessionPrompt.onUnload();"
+	ondialogaccept="return gSessionManagerSessionPrompt.onAcceptDialog(false);"
+	ondialogextra1="return gSessionManagerSessionPrompt.onAcceptDialog(true);"
+	onresize="gSessionManagerSessionPrompt.resize();"
 	buttonlabelextra1="&prompt.append.label;"
 	style="min-width: 40em; -moz-user-focus: ignore;"
 	persist="width"
 	windowtype="SessionManager:SessionPrompt"
 >
-	<script type="application/x-javascript" src="chrome://sessionmanager/content/sessionbrowser.js"/>
-	<script type="application/x-javascript" src="chrome://sessionmanager/content/sessionbrowserPanel.js"/>
-	<script type="application/x-javascript" src="chrome://sessionmanager/content/session_prompt.js"/>
-	
 	<stringbundleset id="stringbundleset">
 		<stringbundle id="bundle_brand" src="chrome://branding/locale/brand.properties"/>
 	</stringbundleset>
 
-	<command id="cmd_menuselect" oncommand="com.morac.SessionManagerAddon.gSessionManagerSessionPrompt.onSelectMenu(event);"/>
+	<command id="cmd_menuselect" oncommand="gSessionManagerSessionPrompt.onSelectMenu(event);"/>
 
 	<panel id="sessionContentPanel"
-		   onpopupshowing="com.morac.SessionManagerAddon.gSessionManagerSessionBrowserPanel.initTreeView();"
-		   onpopuphidden="com.morac.SessionManagerAddon.gSessionManagerSessionBrowserPanel.restoreSelection();">
+		   onpopupshowing="gSessionManagerSessionBrowserPanel.initTreeView();"
+		   onpopuphidden="gSessionManagerSessionBrowserPanel.restoreSelection();">
 		<tree xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" id="tabTreePanel" flex="1" flags="dont-build-content"
-			  seltype="single" _window_label="&winTabTree.windowLabel;" onselect="com.morac.SessionManagerAddon.gSessionManagerSessionBrowserPanel.onSessionTreeSelect();">
+			  seltype="single" _window_label="&winTabTree.windowLabel;" onselect="gSessionManagerSessionBrowserPanel.onSessionTreeSelect();">
 			<treecols>
 				<treecol primary="true" id="titlePanel" persist="width" label="&winTabTree.listHeader;" flex="17" ignoreincolumnpicker="true"/>
 				<splitter class="tree-splitter"/>
@@ -54,7 +50,7 @@
 	
 	<hbox id="menuBox" hidden="true">
 		<button type="menu" id="actionButton" label="">
-			<menupopup id="actionButtonPopup" onpopupshown="com.morac.SessionManagerAddon.gSessionManagerSessionPrompt.updateForPrivateBrowsingMode();">
+			<menupopup id="actionButtonPopup" onpopupshown="gSessionManagerSessionPrompt.updateForPrivateBrowsingMode();">
 				<menuitem id="load" label="&session_load.label;" accesskey="&session_load.accesskey;" command="cmd_menuselect"/>
 				<menuitem id="save" label="&session_save_ok.label;" accesskey="&session_save.accesskey;" command="cmd_menuselect"/>
 				<menuitem id="saveWin" hidden="true" label="&saveOne.label;" accesskey="&saveOne.accesskey;" command="cmd_menuselect"/> <!-- TODO -->
@@ -63,12 +59,12 @@
 				<menuitem id="group-menu" label="&session_group_verb.label;" accesskey="&group.accesskey;" command="cmd_menuselect"/>
 			</menupopup>
 		</button>
-		<checkbox id="leave_window_open" label="&leave_window_open.label;" oncommand="com.morac.SessionManagerAddon.gSessionManagerSessionPrompt.leaveWindowOpenChange(this.checked);"/>
-		<textbox id="search" value="&search.label;" flex="1" searching="false" onselect="com.morac.SessionManagerAddon.gSessionManagerSessionPrompt.clearSearch();" 
-		         onclick="com.morac.SessionManagerAddon.gSessionManagerSessionPrompt.clearSearch();"
-		         onkeydown="com.morac.SessionManagerAddon.gSessionManagerSessionPrompt.clearSearch();"
-		         onkeyup="com.morac.SessionManagerAddon.gSessionManagerSessionPrompt.doSearch();"
-		         onblur="com.morac.SessionManagerAddon.gSessionManagerSessionPrompt.resetSearch();"/>
+		<checkbox id="leave_window_open" label="&leave_window_open.label;" oncommand="gSessionManagerSessionPrompt.leaveWindowOpenChange(this.checked);"/>
+		<textbox id="search" value="&search.label;" flex="1" searching="false" onselect="gSessionManagerSessionPrompt.clearSearch();" 
+		         onclick="gSessionManagerSessionPrompt.clearSearch();"
+		         onkeydown="gSessionManagerSessionPrompt.clearSearch();"
+		         onkeyup="gSessionManagerSessionPrompt.doSearch();"
+		         onblur="gSessionManagerSessionPrompt.resetSearch();"/>
 	</hbox>
 
 	<hbox flex="1">
@@ -79,11 +75,11 @@
 			<vbox flex="1">
 				<tree xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
 					  id="session_tree" rows="5" flex="1" flags="dont-build-content" 
-					  oncontextmenu="com.morac.SessionManagerAddon.gSessionManagerSessionBrowserPanel.checkForOpen(this, event);"
-					  onkeypress="com.morac.SessionManagerAddon.gSessionManagerSessionPrompt.onSessionTreeKeyPress(event)"
-					  onclick="com.morac.SessionManagerAddon.gSessionManagerSessionPrompt.onSessionTreeClick(event);" 
-					  ondblclick="com.morac.SessionManagerAddon.gSessionManagerSessionPrompt.onSessionTreeClick(event)"
-					  onselect="com.morac.SessionManagerAddon.gSessionManagerSessionPrompt.onSessionTreeSelect();">
+					  oncontextmenu="gSessionManagerSessionBrowserPanel.checkForOpen(this, event);"
+					  onkeypress="gSessionManagerSessionPrompt.onSessionTreeKeyPress(event)"
+					  onclick="gSessionManagerSessionPrompt.onSessionTreeClick(event);" 
+					  ondblclick="gSessionManagerSessionPrompt.onSessionTreeClick(event)"
+					  onselect="gSessionManagerSessionPrompt.onSessionTreeSelect();">
 					<treecols id="sessionTreeCols">
 						<treecol id="name" label="&session_name.label;" persist="width" flex="2" ignoreincolumnpicker="true"/>
 						<splitter class="tree-splitter"/>
@@ -95,14 +91,15 @@
 					</treecols>
 					<treechildren flex="1"/>
 				</tree>
-				<splitter id="tree_splitter" hidden="true" state="open" collapse="both" oncommand="com.morac.SessionManagerAddon.gSessionManagerSessionPrompt.resize();">
+				<splitter id="tree_splitter" hidden="true" state="open" collapse="both" oncommand="gSessionManagerSessionPrompt.resize();">
 					<grippy/>
 				</splitter>
 				<vbox id="tabTreeBox" hidden="true" flex="1">
 					<tree xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" id="tabTree"
-						seltype="single" flex="1" flags="dont-build-content"
-						onclick="com.morac.SessionManagerAddon.gSessionManagerSessionBrowser.onTabTreeClick(event);" 
-						onkeydown="com.morac.SessionManagerAddon.gSessionManagerSessionBrowser.onTabTreeKeyDown(event);"
+						seltype="multiple" flex="1" flags="dont-build-content"
+						onclick="gSessionManagerSessionBrowser.onTabTreeClick(event);" 
+						onkeydown="gSessionManagerSessionBrowser.onTabTreeKeyDown(event);"
+						onselect="gSessionManagerSessionBrowser.onTabTreeSelection(event);"
 						_window_label="&winTabTree.windowLabel;">
 						<treecols>
 							<treecol id="restore" type="checkbox" label="&winTabTree.restoreHeader;" ignoreincolumnpicker="true"/>
@@ -118,11 +115,11 @@
 						<treechildren flex="1"/>
 					</tree>
 					<hbox>
-						<button label="&select_all.label;" onclick="com.morac.SessionManagerAddon.gSessionManagerSessionBrowser.tabTreeSelect('ALL');"/>
-						<button label="&select_none.label;" onclick="com.morac.SessionManagerAddon.gSessionManagerSessionBrowser.tabTreeSelect('NONE');"/>
-						<button label="&toggle_selection.label;" onclick="com.morac.SessionManagerAddon.gSessionManagerSessionBrowser.tabTreeSelect('TOGGLE');"/>
+						<button label="&select_all.label;" onclick="gSessionManagerSessionBrowser.tabTreeSelect('ALL');"/>
+						<button label="&select_none.label;" onclick="gSessionManagerSessionBrowser.tabTreeSelect('NONE');"/>
+						<button label="&toggle_selection.label;" onclick="gSessionManagerSessionBrowser.tabTreeSelect('TOGGLE');"/>
 					</hbox>
-					<description id="ctrl_click_note" class="header" hidden="true">&ctrl_click_note.label;</description>
+					<description id="tab_open_click_note" class="header" hidden="true">&tab_open_click_note.label;</description>
 				</vbox>
 			</vbox>
 			<separator class="thin"/>
@@ -132,13 +129,13 @@
 				<vbox id="text_label" class="header"/>
 				<hbox id="session-text-container" hidden="true">
 					<label class="textbox_label" value="&session_name.label;"></label>
-					<textbox flex="1" id="text_box" oninput="com.morac.SessionManagerAddon.gSessionManagerSessionPrompt.onTextboxInput();"/>
+					<textbox flex="1" id="text_box" oninput="gSessionManagerSessionPrompt.onTextboxInput();"/>
 				</hbox>
 				<hbox id="group-text-container" hidden="true">
 					<label class="textbox_label" value="&session_group.label;"></label>
-					<menulist flex="1" id="group_menu_list" editable="true" onkeyup="com.morac.SessionManagerAddon.gSessionManagerSessionPrompt.isAcceptable();"
-					          onchange="window.setTimeout(function() { com.morac.SessionManagerAddon.gSessionManagerSessionPrompt.isAcceptable(); },50)"
-					          onmouseup="window.setTimeout(function() { com.morac.SessionManagerAddon.gSessionManagerSessionPrompt.isAcceptable(); },50)">
+					<menulist flex="1" id="group_menu_list" editable="true" onkeyup="gSessionManagerSessionPrompt.isAcceptable();"
+					          onchange="window.setTimeout(function() { gSessionManagerSessionPrompt.isAcceptable(); },50)"
+					          onmouseup="window.setTimeout(function() { gSessionManagerSessionPrompt.isAcceptable(); },50)">
 						<menupopup>
 						</menupopup>
 					</menulist>
@@ -154,14 +151,18 @@
 					</radiogroup>
 					<checkbox id="checkbox_ignore" label="&prompt.ignore.label;" hidden="true"/>
 					<checkbox id="checkbox_autosave" label="&prompt.autosave.label;" hidden="true"
-					          oncommand="window.setTimeout(function() { com.morac.SessionManagerAddon.gSessionManagerSessionPrompt._save_every_update(); },0)"/>
+					          oncommand="window.setTimeout(function() { gSessionManagerSessionPrompt._save_every_update(); },0)"/>
 				</hbox>
 				<hbox id="save_every" hidden="true">
 					<label class="textbox_label" id="autosave_label" value="&prompt.save_every1.label;"/>
-					<textbox flex="1" minwidth="25" id="autosave_time" onkeyup="com.morac.SessionManagerAddon.gSessionManagerSessionPrompt.isNumber(this);"/>
+					<textbox flex="1" minwidth="25" id="autosave_time" onkeyup="gSessionManagerSessionPrompt.isNumber(this);"/>
 					<label class="textbox_label" id="autosave_label2" value="&prompt.save_every2.label;"/>
 				</hbox>
 			</vbox>
 		</vbox>
 	</hbox>
+	
+	<script type="application/x-javascript" src="chrome://sessionmanager/content/sessionbrowser.js"/>
+	<script type="application/x-javascript" src="chrome://sessionmanager/content/sessionbrowserPanel.js"/>
+	<script type="application/x-javascript" src="chrome://sessionmanager/content/session_prompt.js"/>
 </dialog>

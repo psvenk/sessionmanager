@@ -60,13 +60,12 @@
 <!ENTITY prompt.save_every2.label "хвилин (вимкнуто якщо пусте)">
 <!ENTITY winTabTree.restoreHeader "Відновити">
 <!ENTITY winTabTree.listHeader "Вікна й вкладки">
-<!--   LOCALIZATION NOTE: &#37;S will be replaced with a number.   -->
 <!ENTITY winTabTree.windowLabel "Вікно &#37;S">
 <!ENTITY load.label "Завантажити сеанс...">
 <!ENTITY load.accesskey "а">
 <!ENTITY prompt.append.label "Додати до сеансу">
 <!ENTITY prompt.replace.label "Замістити сеанс">
-<!ENTITY ctrl_click_note.label "Зауважте: клацання по вкладці з натисненою клавішею CTRL відкриє цю вкладку в існуючому вікні">
+<!ENTITY tab_open_click_note.label "Зауважте: клацання по вкладці з натисненою клавішею ALT відкриє цю вкладку в існуючому вікні">
 <!ENTITY select_all.label "Виділити все">
 <!ENTITY select_none.label "Не виділяти нічого">
 <!ENTITY toggle_selection.label "Перемкнути виділення">
@@ -81,9 +80,9 @@
 <!ENTITY load_append_window.label "Завантажити (Додати до поточного вікна)">
 <!ENTITY load_append_window.accesskey "З">
 <!ENTITY leave_window_open.label "Залишити це вікно відкритим">
-<!ENTITY clearTabList.label "Очистити список &apos;закритих&apos; вкладок">
+<!ENTITY clearTabList.label "Очистити список 'закритих' вкладок">
 <!ENTITY clearTabList.accesskey "О">
-<!ENTITY clearWindowList.label "Очистити список &apos;закритих&apos; вікон">
+<!ENTITY clearWindowList.label "Очистити список 'закритих' вікон">
 <!ENTITY clearWindowList.accesskey "в">
 <!ENTITY hidden.label "Приховано">
 <!ENTITY contribute.label "Внески">

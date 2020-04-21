@@ -1,8 +1,19 @@
-Components.utils.import("resource://sessionmanager/modules/logger.jsm");
-Components.utils.import("resource://sessionmanager/modules/preference_manager.jsm");
-Components.utils.import("resource://sessionmanager/modules/session_manager.jsm");
+"use strict";
 
-restorePrompt = function() {
+// Get lazy getter functions from XPCOMUtils and Services
+Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+
+// Logger object - use same module file
+XPCOMUtils.defineLazyModuleGetter(this, "log", "resource://sessionmanager/modules/logger.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "logError", "resource://sessionmanager/modules/logger.jsm");
+
+XPCOMUtils.defineLazyModuleGetter(this, "Constants", "resource://sessionmanager/modules/shared_data/constants.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "PreferenceManager", "resource://sessionmanager/modules/preference_manager.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "SessionIo", "resource://sessionmanager/modules/session_file_io.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "SharedData", "resource://sessionmanager/modules/shared_data/data.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "Utils", "resource://sessionmanager/modules/utils.jsm");
+
+var restorePrompt = function() {
 	log("restorePrompt start", "INFO");
 	
 	// default count variable
@@ -12,21 +23,21 @@ restorePrompt = function() {
 	var	screensize = screen.width + "x" + screen.height;
 			
 	// Get count from crashed session and prepare to save it.  Don't save it yet or it will show up in selection list.
-	var file = gSessionManager.getProfileFile("sessionstore.js");
+	var file = SessionIo.getProfileFile("sessionstore.js");
 	
 	// If file does not exist, try looking for SeaMonkey's sessionstore file
 	if (!file.exists()) {
-		file = gSessionManager.getProfileFile("sessionstore.json");
+		file = SessionIo.getProfileFile("sessionstore.json");
 	}
 	
 	if (file.exists())
 	{
 		try {
-			var name = gSessionManager.getFormattedName("", new Date(file.lastModifiedTime), gSessionManager._string("crashed_session"));
-			state = gSessionManager.readFile(file);
-			count = gSessionManager.getCount(state);
-			session = gSessionManager.nameState("timestamp=" + file.lastModifiedTime + "\nautosave=false\tcount=" + count.windows + "/" + count.tabs + "\tgroup=" + gSessionManager._string("backup_sessions") + "\tscreensize=" + screensize + "\n" + state, name);
-			backupFile = gSessionManager.getSessionDir(BACKUP_SESSION_FILENAME, true);
+			var name = Utils.getFormattedName("", new Date(file.lastModifiedTime), Utils._string("crashed_session"));
+			state = SessionIo.readFile(file);
+			count = Utils.getCount(state);
+			session = Utils.nameState("timestamp=" + file.lastModifiedTime + "\nautosave=false\tcount=" + count.windows + "/" + count.tabs + "\tgroup=" + Utils._string("backup_sessions") + "\tscreensize=" + screensize + "\n" + state, name);
+			backupFile = SessionIo.getSessionDir(Constants.BACKUP_SESSION_FILENAME, true);
 			
 			if (count.windows && count.tabs) countString = count.windows + "," + count.tabs;
 		}
@@ -36,87 +47,88 @@ restorePrompt = function() {
 	}
 	
 	// Don't show crash prompt if user doesn't want it.
-	var show_crash_prompt = !gPreferenceManager.get("use_browser_crash_prompt", false);
+	var show_crash_prompt = !PreferenceManager.get("use_browser_crash_prompt", false);
 	
 	var params = window.arguments[0].QueryInterface(Components.interfaces.nsIDialogParamBlock);
 	params.SetInt(0, 0);
 			
 	var values = { name: "*", addCurrentSession: true, ignorable: false, count: countString }
-	var fileName = (show_crash_prompt && location.search != "?cancel")?(gSessionManager.prompt(gSessionManager._string("recover_session"), gSessionManager._string("recover_session_ok"), values)?values.name:""):"";
+	var fileName = (show_crash_prompt && location.search != "?cancel")?(Utils.prompt(Utils._string("recover_session"), Utils._string("recover_session_ok"), values)?values.name:""):"";
 	if (fileName != "*")
 	{
 		if (fileName)
 		{
-			gSessionManager._recovering = { fileName: fileName, sessionState: values.sessionState };
+			SharedData._recovering = { fileName: fileName, sessionState: values.sessionState };
 		}
-		else if (!gPreferenceManager.get("save_window_list", false))
+		else if (!PreferenceManager.get("save_window_list", false))
 		{
-			gSessionManager.clearUndoData("window", true);
+			SessionIo.clearUndoData("window", true);
 		}
 		if (show_crash_prompt) params.SetInt(0, 1); // don't recover the crashed session
 	}
 	
-	gSessionManager.mPref["encrypt_sessions"] = gPreferenceManager.get("encrypt_sessions", false);
+	let encrypt_sessions = PreferenceManager.get("encrypt_sessions", false);
 	// actually save the crashed session
 	if (session && backupFile) {
-		gSessionManager.writeFile(backupFile, session);
-		gSessionManager._crash_backup_session_file = backupFile.leafName;
-		if (gSessionManager.mPref["encrypt_sessions"]) gSessionManager._encrypt_file = backupFile.leafName;
+		SessionIo.writeFile(backupFile, session);
+		SharedData._crash_backup_session_file = backupFile.leafName;
+		if (encrypt_sessions) SharedData._encrypt_file = backupFile.leafName;
 	}
 	
-	log("restorePrompt: _encrypt_file = " + gSessionManager._encrypt_file, "DATA");
+	log("restorePrompt: _encrypt_file = " + SharedData._encrypt_file, "DATA");
+
+	// If browser is set to clear history on shutdown, then it won't restore crashes so do that ourselves
+	var privacy = PreferenceManager.get("privacy.sanitize.sanitizeOnShutdown", false, true) && PreferenceManager.get("privacy.clearOnShutdown.history", false, true);
+	var restore_autosave = false;
 	
-	// If user chose to prompt for tabs and selected a filename
-	if (fileName && values.sessionState) {
+	// If recovery current session and user chose specific tabs or browser won't do the restore
+	if ((fileName == "*") && (privacy || values.sessionState)) {
 		// if recovering current session, recover it from our backup file
-		if (fileName == "*") {
-			fileName = backupFile.leafName;
-			params.SetInt(0, 1); // don't recover the crashed session
-			gSessionManager._recovering = { fileName: fileName, sessionState: values.sessionState };
-		}
+		fileName = backupFile.leafName;
+		params.SetInt(0, 1); // don't recover the crashed session
+		SharedData._recovering = { fileName: fileName, sessionState: values.sessionState };
+		restore_autosave = privacy && !values.sessionState;
 	}
 		
-	log("restorePrompt: _recovering = " + (gSessionManager._recovering ? gSessionManager._recovering.fileName : "null"), "DATA");
+	log("restorePrompt: _recovering = " + (SharedData._recovering ? SharedData._recovering.fileName : "null"), "DATA");
 	
-	var autosave_values = gPreferenceManager.get("_autosave_values", "").split("\n");
-	var autosave_filename = autosave_values[0];
+	var autosave_values = PreferenceManager.get("_autosave_values", "").split("\n");
+	var autosave_filename = restore_autosave ? null : autosave_values[0];
+	// If not recovering last session or recovering last session, but selecting tabs, always save autosave session
 	// Note that if the crashed session was an autosave session, it won't show up as a choice in the crash prompt so 
-	// the user can never choose it
-	if (autosave_filename)
+	// the user can never choose it.
+	if (autosave_filename && (fileName != "*"))
 	{
-		// if not recovering last session or recovering last session, but selecting tabs, always save autosave session
-		if (fileName != "*")
-		{
-			// delete autosave preferences
-			gPreferenceManager.delete("_autosave_values");
+		log("restorePrompt: Saving autosave file: "  + autosave_filename, "DATA");
+		
+		// delete autosave preferences
+		PreferenceManager.delete("_autosave_values");
 
-			// Clear any stored auto save session preferences
-			gSessionManager.getAutoSaveValues();
-			
-			log("Saving crashed autosave session " + autosave_filename, "DATA");
-			var temp_state = gSessionManager.readFile(file);
-			// encrypt if encryption enabled
-			if (gSessionManager.mPref["encrypt_sessions"]) {
-				gSessionManager.mPref["encrypted_only"] = gPreferenceManager.get("encrypted_only", false);
-				temp_state = gSessionManager.decryptEncryptByPreference(temp_state);
-			}
-			
-			if (temp_state) {
-				var autosave_time = isNaN(autosave_values[3]) ? 0 : autosave_values[3];
-				var autosave_state = gSessionManager.nameState("timestamp=" + file.lastModifiedTime + "\nautosave=session/" + autosave_time +
-																											 "\tcount=" + count.windows + "/" + count.tabs + (autosave_values[2] ? ("\tgroup=" + autosave_values[2]) : "") +
-																											 "\tscreensize=" + screensize + "\n" + temp_state, autosave_values[1]);
-				gSessionManager.writeFile(gSessionManager.getSessionDir(autosave_filename), autosave_state);
-			}
+		// Clear any stored auto save session preferences
+		Utils.getAutoSaveValues();
+		
+		log("Saving crashed autosave session " + autosave_filename, "DATA");
+		var temp_state = SessionIo.readFile(file);
+		// encrypt if encryption enabled
+		if (encrypt_sessions) {
+			temp_state = Utils.decryptEncryptByPreference(temp_state);
+		}
+		
+		if (temp_state) {
+			var autosave_time = isNaN(autosave_values[3]) ? 0 : autosave_values[3];
+			var autosave_state = Utils.nameState("timestamp=" + file.lastModifiedTime + "\nautosave=session/" + autosave_time +
+																										 "\tcount=" + count.windows + "/" + count.tabs + (autosave_values[2] ? ("\tgroup=" + autosave_values[2]) : "") +
+																										 "\tscreensize=" + screensize + "\n" + temp_state, autosave_values[1]);
+			SessionIo.writeFile(SessionIo.getSessionDir(autosave_filename), autosave_state);
 		}
 	}
 	
 	// If browser is not doing the restore, save any autosave windows
 	if (params.GetInt(0) == 1)
-		gSessionManager._save_crashed_autosave_windows = true;
+		SharedData._save_crashed_autosave_windows = true;
 
 	// Don't prompt for a session again if user cancels crash prompt
-	gSessionManager._no_prompt_for_session = true;
+	SharedData._no_prompt_for_session = true;
 	log("restorePrompt end", "INFO");
 };
 		

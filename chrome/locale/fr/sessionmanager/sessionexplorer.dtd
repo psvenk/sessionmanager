@@ -2,7 +2,7 @@
 <!ENTITY session_open.accesskey "O">
 <!ENTITY session_open.tooltip "Ouvrir la session sélectionnée">
 <!ENTITY session_open_overwrite.label "Ouvrir (remplacer)">
-<!ENTITY session_open_overwrite.accesskey "v">
+<!ENTITY session_open_overwrite.accesskey "m">
 <!ENTITY session_open_overwrite.tooltip "Ouvrir la session sélectionnée ???">
 <!ENTITY session_open_newwindow.label "Ouvrir (nouvelle fenêtre)">
 <!ENTITY session_open_newwindow.accesskey "n">

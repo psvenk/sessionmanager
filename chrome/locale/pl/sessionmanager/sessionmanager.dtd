@@ -1,5 +1,4 @@
 <!ENTITY sessionManager "Menedżer sesji">
-<!ENTITY toolsmenu.accesskey "M">
 <!ENTITY save.label "Zapisz sesję">
 <!ENTITY save.accesskey "Z">
 <!ENTITY saveOne.label "Zapisz aktywne okno">
@@ -53,7 +52,6 @@
 <!ENTITY change_group.label "Zmień grupę…">
 <!ENTITY change_group.accesskey "M">
 <!ENTITY group.label "Grupuj sesje…">
-<!ENTITY group.accesskey "G">
 <!ENTITY toolbar.menu.tooltip "Otwiera menu zarządzania sesją">
 <!ENTITY toolbar.undo.menu.tooltip "Otwiera menu ostatnio zamkniętych okien i kart">
 <!ENTITY prompt.save_every1.label "Zapisuj co">
@@ -66,14 +64,13 @@
 <!ENTITY load.accesskey "c">
 <!ENTITY prompt.append.label "Dołącz do sesji">
 <!ENTITY prompt.replace.label "Zamień sesję">
-<!ENTITY ctrl_click_note.label "Informacja: Kliknięcie nazwy karty z wciśniętym klawiszem [Ctrl] spowoduje otwarcie tej karty w istniejącym oknie.">
+<!ENTITY tab_open_click_note.label "Informacja: Kliknięcie nazwy karty z wciśniętym klawiszem [Alt] spowoduje otwarcie tej karty w istniejącym oknie.">
 <!ENTITY select_all.label "Zaznacz wszystko">
 <!ENTITY select_none.label "Odznacz wszystko">
 <!ENTITY toggle_selection.label "Zmień zaznaczenia">
 <!ENTITY winTabTree.urlHeader "Adres">
 <!ENTITY prompt.append_window.label "Dołącz do bieżącej sesji">
 <!ENTITY session_explorer.label "Eksplorator sesji">
-<!ENTITY session_explorer.accesskey "E">
 <!ENTITY closeWindowSession.label "Zapisz i zamknij okno sesji">
 <!ENTITY closeWindowSession.accesskey "M">
 <!ENTITY abandonWindowSession.label "Opuść okno sesji">
@@ -97,10 +94,8 @@
 <!ENTITY permanently_delete.accesskey "c">
 <!ENTITY search.label "Szukaj…">
 <!ENTITY edit.label "Edytuj sesję…">
-<!ENTITY edit.accesskey "E">
 <!ENTITY addtab.label "Dodaj kartę do sesji…">
 <!ENTITY addtab.accesskey "D">
 <!ENTITY viewcontents.label "Wyświetl zawartość sesji">
 <!ENTITY viewcontents.accesskey "W">
 <!ENTITY export_to_html.label "Eksportuj zawartość sesji jako plik zakładek HTML">
-<!ENTITY export_to_html.accesskey "E">

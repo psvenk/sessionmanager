@@ -35,7 +35,7 @@
 <!ENTITY closed_tabs.label0 "never">
 <!ENTITY closed_tabs.label1 "at startup">
 <!ENTITY closed_tabs.label2 "always">
-<!ENTITY window_list.label "Don&apos;t clear the list of closed windows at shutdown">
+<!ENTITY window_list.label "Don't clear the list of closed windows at shutdown">
 <!ENTITY window_list.accesskey "o">
 <!ENTITY clear_list.label "Clear List">
 <!ENTITY clear_list.accesskey "r">
@@ -43,10 +43,10 @@
 <!ENTITY name_format.caption "Session Names">
 <!ENTITY name_format.label "Format for the suggestions of session names:">
 <!ENTITY name_format.accesskey "F">
-<!ENTITY name_format.desc "Use &#37;t for the active tab&apos;s title, &#37;d for today&apos;s date and &#37;m for the time; additionally the title&apos;s length can be limited to # characters: &#37;#t.">
+<!ENTITY name_format.desc "Use &#37;t for the active tab's title, &#37;d for today's date and &#37;m for the time; additionally the title's length can be limited to # characters: &#37;#t.">
 <!ENTITY sessionstore.caption "SessionStore">
 <!ENTITY service.caption "&quot;SessionStore&quot; Settings">
-<!ENTITY service.description "Don&apos;t touch these, unless you know what you&apos;re doing!">
+<!ENTITY service.description "Don't touch these, unless you know what you're doing!">
 <!ENTITY interval.label "Minimum time interval between two state saves (in seconds):">
 <!ENTITY interval.accesskey "i">
 <!ENTITY postdata.label "Maximum amount of POSTDATA to be stored (in bytes; -1 for all):">
@@ -96,7 +96,7 @@
 <!ENTITY disable_cache_fixer.accesskey "D">
 <!ENTITY encrypted_only.label "If encryption fails, do NOT save data unencrypted.">
 <!ENTITY encrypted_only.accesskey "N">
-<!ENTITY encrypt2.desc "Warning: If this is checked and the session or window data cannot be encrypted, the data will be lost with no way to recover it.  Encryption will fail if the master password is requested and not entered, so think carefully before checking this box. ">
+<!ENTITY encrypt2.desc "Warning: If this is checked and the session or window data cannot be encrypted, the data will be lost with no way to recover it.  Encryption will fail if the master password is requested and not entered, so think carefully before checking this box.">
 <!ENTITY closed_window_list.label "Use browser's built-in closed window list">
 <!ENTITY closed_window_list.accesskey "U">
 <!ENTITY closed_windows.label "Restore the list of reopenable closed windows:">
@@ -124,14 +124,14 @@
 <!ENTITY log_level_info.accesskey "i">
 <!ENTITY log_level_extra.label "Log Extra Debugging Data">
 <!ENTITY log_level_extra.accesskey "e">
-<!ENTITY reload.label "Reload All Restored Windows">
-<!ENTITY reload.accesskey "l">
+<!ENTITY reload.label "Bypass cache when restoring sessions">
+<!ENTITY reload.accesskey "B">
 <!ENTITY overwrite.label "Replace Existing Windows">
 <!ENTITY overwrite.accesskey "R">
 <!ENTITY allow_saving_during_pbm.label "Allow saving during Private Browsing Mode">
 <!ENTITY allow_saving_during_pbm.label2 "Requires encryption to be enabled">
 <!ENTITY allow_saving_during_pbm.accesskey "S">
-<!ENTITY session_name_in_titlebar.label " the name of active sessions to the title bar">
+<!ENTITY session_name_in_titlebar.label "the name of active sessions to the title bar">
 <!ENTITY session_name_in_titlebar.accesskey "n">
 <!ENTITY prepend.label "Prepend">
 <!ENTITY append.label "Append">

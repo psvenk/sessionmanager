@@ -2,7 +2,7 @@
 <!ENTITY general.caption "Générales">
 <!ENTITY startNend.caption "Démarrage &amp; fermeture">
 <!ENTITY resume_sess.label "Au démarrage, toujours charger la session suivante :">
-<!ENTITY resume_sess.accesskey "s">
+<!ENTITY resume_sess.accesskey "r">
 <!ENTITY backup_sess.label "À la fermeture">
 <!ENTITY backup_sess.accesskey "m">
 <!ENTITY backup_session.label0 "fermer la session courante">
@@ -61,7 +61,7 @@
 <!ENTITY encrypt.caption "Chiffrement">
 <!ENTITY encrypt.desc "Avertissement : les données de session chiffrées ne peuvent être lues qu'avec des fichiers key3.db et cert8.db identiques. De plus, si un mot de passe principal a été défini, les sessions ne peuvent ni être chiffrées, ni être déchiffrées si ce mot de passe n'est pas indiqué.">
 <!ENTITY encrypt.label "Chiffrer la session enregistrée et les données de la fenêtre fermée">
-<!ENTITY encrypt.accesskey "e">
+<!ENTITY encrypt.accesskey "c">
 <!ENTITY change_dir.label "Modifier">
 <!ENTITY change_dir.accesskey "M">
 <!ENTITY default_dir.label "Défaut">
@@ -95,16 +95,16 @@
 <!ENTITY disable_cache_fixer.label "Désactiver la fonctionnalité Cache Fixer">
 <!ENTITY disable_cache_fixer.accesskey "D">
 <!ENTITY encrypted_only.label "Si le chiffrement a échoué, NE PAS enregistrer les données non chiffrées.">
-<!ENTITY encrypted_only.accesskey "N">
+<!ENTITY encrypted_only.accesskey "h">
 <!ENTITY encrypt2.desc "Avertissement : si cette option est cochée et que les données de session ou de fenêtre ne peuvent pas être chiffrées, les données seront perdues sans aucun moyen de les récupérer. Le chiffrement échoue lorsque le mot de passe principal est demandé et n'est pas indiqué, veuillez donc bien y réfléchir à deux fois avant de cocher cette case.">
 <!ENTITY closed_window_list.label "Utiliser la liste de fenêtres fermées proposée par le navigateur">
-<!ENTITY closed_window_list.accesskey "U">
+<!ENTITY closed_window_list.accesskey "F">
 <!ENTITY closed_windows.label "Rétablir la liste des fenêtres que l'on peut à nouveau ouvrir :">
 <!ENTITY closed_windows.accesskey "S">
 <!ENTITY open_as_tabs.label "Ouvrir dans des onglets dans la fenêtre courante">
 <!ENTITY open_as_tabs.accesskey "V">
 <!ENTITY last_window_shutdown.label "Quitter le navigateur lors de la fermeture de la dernière fenêtre">
-<!ENTITY last_window_shutdown.accesskey "T">
+<!ENTITY last_window_shutdown.accesskey "D">
 <!ENTITY preselect_previous_session.label "Présélectionner la session précédente">
 <!ENTITY preselect_previous_session.accesskey "R">
 <!ENTITY logging.caption "Journal">
@@ -117,9 +117,9 @@
 <!ENTITY log_level_state.label "Enregistrer les arrêts">
 <!ENTITY log_level_state.accesskey "g">
 <!ENTITY log_level_trace.label "Enregistrer les données de traçage">
-<!ENTITY log_level_trace.accesskey "t">
+<!ENTITY log_level_trace.accesskey "j">
 <!ENTITY log_level_data.label "Enregistrer les données variables">
-<!ENTITY log_level_data.accesskey "v">
+<!ENTITY log_level_data.accesskey "d">
 <!ENTITY log_level_info.label "Enregistrer les messages d'informations">
 <!ENTITY log_level_info.accesskey "i">
 <!ENTITY log_level_extra.label "Enregistrer des données de débogage supplémentaires">
@@ -150,7 +150,7 @@
 <!ENTITY clear.label "Effacer">
 <!ENTITY clear.accesskey "f">
 <!ENTITY clear_tab_list.label "Effacer les onglets fermés">
-<!ENTITY clear_tab_list.accesskey "a">
+<!ENTITY clear_tab_list.accesskey "g">
 <!ENTITY clear_window_list.label "Effacer les fenêtres fermées">
 <!ENTITY clear_window_list.accesskey "n">
 <!ENTITY backup_on_restart.label "Enregistrer la sauvegarde au démarrage du navigateur">
@@ -192,7 +192,7 @@
 <!ENTITY allow_duplicates.label "Autoriser l'enregistrement d'une session avec le même nom qu'une session existante">
 <!ENTITY allow_duplicates.accesskey "A">
 <!ENTITY backup_every.label "Créer une nouvelle sauvegarde de session toutes les">
-<!ENTITY backup_every.accesskey "C">
+<!ENTITY backup_every.accesskey "g">
 <!ENTITY minutes "minutes">
 <!ENTITY restore_on_demand.label "Rétablir les onglets à la demande">
 <!ENTITY restore_on_demand.accesskey "R">

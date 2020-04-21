@@ -60,13 +60,12 @@
 <!ENTITY prompt.save_every2.label "минут (не работает, если поле пустое)">
 <!ENTITY winTabTree.restoreHeader "Восстановить">
 <!ENTITY winTabTree.listHeader "окна и вкладки">
-<!-- LOCALIZATION NOTE: &#37;S will be replaced with a number. -->
 <!ENTITY winTabTree.windowLabel "окно &#37;S">
 <!ENTITY load.label "Загрузить сессию…">
 <!ENTITY load.accesskey "З">
 <!ENTITY prompt.append.label "Добавить к сессии">
 <!ENTITY prompt.replace.label "Заменить сессию">
-<!ENTITY ctrl_click_note.label "Внимание: щелчок по вкладке с нажатой клавишей CTRL добавит вкладку к содержимому существующего окна.">
+<!ENTITY tab_open_click_note.label "Внимание: щелчок по вкладке с нажатой клавишей ALT добавит вкладку к содержимому существующего окна.">
 <!ENTITY select_all.label "Выбрать все">
 <!ENTITY select_none.label "Ничего не выбирать">
 <!ENTITY toggle_selection.label "Переключить выбор">
@@ -95,3 +94,12 @@
 <!ENTITY empty_trash.accesskey "р">
 <!ENTITY permanently_delete.label "Стереть сессию окончательно">
 <!ENTITY permanently_delete.accesskey "о">
+<!ENTITY search.label "Поиск…">
+<!ENTITY edit.label "Редактировать сессию…">
+<!ENTITY edit.accesskey "Р">
+<!ENTITY addtab.label "Добавить вкладку к сессии…">
+<!ENTITY addtab.accesskey "Д">
+<!ENTITY viewcontents.label "Просмотреть содержимое сессии">
+<!ENTITY viewcontents.accesskey "м">
+<!ENTITY export_to_html.label "Экспортировать содержимое сессии в файл закладок HTML">
+<!ENTITY export_to_html.accesskey "Э">

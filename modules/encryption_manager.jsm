@@ -1,16 +1,28 @@
-var EXPORTED_SYMBOLS = ["gEncryptionManager"];
+"use strict";
+
+this.EXPORTED_SYMBOLS = ["EncryptionManager"];
 
 const Cc = Components.classes;
 const Ci = Components.interfaces;
-const Cu = Components.utils;
 const Cr = Components.results;
 
-Cu.import("resource://sessionmanager/modules/logger.jsm");
-Cu.import("resource://sessionmanager/modules/session_manager.jsm");
+// Get lazy getter functions from XPCOMUtils
+Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+Components.utils.import("resource://gre/modules/Services.jsm");
 
-var gEncryptionManager = {
+// Logger object - use same module file
+XPCOMUtils.defineLazyModuleGetter(this, "log", "resource://sessionmanager/modules/logger.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "logError", "resource://sessionmanager/modules/logger.jsm");
+
+XPCOMUtils.defineLazyModuleGetter(this, "Constants", "resource://sessionmanager/modules/shared_data/constants.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "SharedData", "resource://sessionmanager/modules/shared_data/data.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "Utils", "resource://sessionmanager/modules/utils.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "SessionIo", "resource://sessionmanager/modules/session_file_io.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "PreferenceManager", "resource://sessionmanager/modules/preference_manager.jsm");
+
+this.EncryptionManager = {
 	changeEncryption: function(aFolder) {
-		gSessionManager.mEncryptionChangeInProgress = true;
+		SharedData.mEncryptionChangeInProgress = true;
 		EncryptionChangeHandler.stop_processing = false;
 		EncryptionChangeHandler.changeClosedWindowEncryption();
 		EncryptionChangeHandler.timer = Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
@@ -27,11 +39,13 @@ var gEncryptionManager = {
 	stop: function() {
 		log("Encryption change interrupted, will resume next time browser is idle", "INFO");
 		EncryptionChangeHandler.stop_processing = true;
-	},
+	}
 };
+
+Object.freeze(EncryptionManager);
 	
 // This object handles the asynchronous read/writes when changing the encryption status of all session files
-var EncryptionChangeHandler = {
+let EncryptionChangeHandler = {
 	exception: null,
 	sessions: null,
 	current_filename: null,
@@ -45,7 +59,7 @@ var EncryptionChangeHandler = {
 		// if no sessions, then this is first time run
 		if (!this.sessions) {
 			this.exception = null;
-			this.sessions = gSessionManager.getSessions(null, this.current_folder);
+			this.sessions = SessionIo.getSessions(null, this.current_folder);
 			if (!this.sessions.length) {
 				this.sessions = null;
 				return false;
@@ -56,13 +70,13 @@ var EncryptionChangeHandler = {
 		let session = this.sessions.pop();
 		if (session) {
 			// if encryption settings don't match change encryption, else go to next file
-			if (session.encrypted != gSessionManager.mPref["encrypt_sessions"]) {
+			if (session.encrypted != PreferenceManager.get("encrypt_sessions")) {
 				this.current_filename = session.fileName
-				let file = this.current_folder ? gSessionManager.getSessionDir(this.current_folder) : gSessionManager.getSessionDir(this.current_filename);
+				let file = this.current_folder ? SessionIo.getSessionDir(this.current_folder) : SessionIo.getSessionDir(this.current_filename);
 				try {
 					if (this.current_folder) file.append(this.current_filename);
 					if (file.exists()) {
-						gSessionManager.asyncReadFile(file,  function(aInputStream, aStatusCode) {
+						SessionIo.asyncReadFile(file,  function(aInputStream, aStatusCode) {
 							EncryptionChangeHandler.onSessionFileRead(aInputStream, aStatusCode);
 						});
 					}
@@ -103,7 +117,7 @@ var EncryptionChangeHandler = {
 				log("Encryption change complete except for deleted sessions.", "TRACE");
 				// update deleted sessions as well
 				this.sessions = null;
-				this.current_folder = gSessionManager._string("deleted_sessions_folder");
+				this.current_folder = Utils._string("deleted_sessions_folder");
 				this.current_cache_folder = this.current_folder + "/";
 				this.changed_deleted_folder = true;
 				if (!this.changeSessionEncryption()) {
@@ -119,13 +133,13 @@ var EncryptionChangeHandler = {
 					this.current_cache_folder = "";
 					this.changed_deleted_folder = false;
 					if (this.exception) {
-						gSessionManager.cryptError(this.exception);
+						Utils.cryptError(this.exception);
 						this.exception = null;
 					}
 				}
 				
-				OBSERVER_SERVICE.notifyObservers(null, "sessionmanager:encryption-change", "done");
-				gSessionManager.mEncryptionChangeInProgress = false;
+				Services.obs.notifyObservers(null, "sessionmanager:encryption-change", "done");
+				SharedData.mEncryptionChangeInProgress = false;
 				log("Encryption change " + (aForceStop ? "interrupted" : "complete"), "TRACE");
 			}
 		}
@@ -133,11 +147,11 @@ var EncryptionChangeHandler = {
 	
 	changeClosedWindowEncryption: function() {
 		let exception = null;
-		if (!gSessionManager.mUseSSClosedWindowList) {
-			let windows = gSessionManager.getClosedWindows_SM();
+		if (!PreferenceManager.get("use_SS_closed_window_list")) {
+			let windows = SessionIo.getClosedWindows_SM();
 			let okay = true;
 			windows.forEach(function(aWindow) {
-				aWindow.state = gSessionManager.decryptEncryptByPreference(aWindow.state, true);
+				aWindow.state = Utils.decryptEncryptByPreference(aWindow.state, true);
 				if (!aWindow.state || (typeof(aWindow.state) != "string")) {
 					exception = aWindow.state;
 					okay = false;
@@ -145,9 +159,9 @@ var EncryptionChangeHandler = {
 				}
 			});
 			if (okay) {
-				gSessionManager.storeClosedWindows_SM(windows);
+				SessionIo.storeClosedWindows_SM(windows);
 			}
-			if (exception) gSessionManager.cryptError(exception);
+			if (exception) Utils.cryptError(exception);
 		}
 	},
 	
@@ -176,23 +190,23 @@ var EncryptionChangeHandler = {
 			{
 				try {
 					state = state.replace(/\r\n?/g, "\n");
-					if (SESSION_REGEXP.test(state))
+					if (Constants.SESSION_REGEXP.test(state))
 					{
 						state = state.split("\n")
-						state[4] = gSessionManager.decryptEncryptByPreference(state[4], true);
+						state[4] = Utils.decryptEncryptByPreference(state[4], true);
 						if (state[4] && (typeof(state[4]) == "string")) {
 							state = state.join("\n");
-							let file = this.current_folder ? gSessionManager.getSessionDir(this.current_folder) : gSessionManager.getSessionDir(this.current_filename);
+							let file = this.current_folder ? SessionIo.getSessionDir(this.current_folder) : SessionIo.getSessionDir(this.current_filename);
 							if (this.current_folder) file.append(this.current_filename);
 							
 							// copy file name and path since it can get overwritten as this is an asynchronous write
 							let path = this.current_cache_folder;
-							gSessionManager.writeFile(file, state, function(aResult) {
+							SessionIo.writeFile(file, state, function(aResult) {
 								//log("Wrote " + (path ? path : "" ) + filename, "EXTRA");
 								// If write successful
 								if (Components.isSuccessCode(aResult)) {
 									// Update cache with new timestamp so we don't re-read it for no reason
-									gSessionManager.updateCachedLastModifiedTime(path + file.leafName, file.lastModifiedTime);
+									SessionIo.updateCachedLastModifiedTime(path + file.leafName, file.lastModifiedTime);
 								}
 								EncryptionChangeHandler.processNextFile();
 							});
@@ -216,4 +230,4 @@ var EncryptionChangeHandler = {
 			EncryptionChangeHandler.processNextFile();
 		//log("Read " + (this.current_folder ? (this.current_folder + "/") : "" ) + this.current_filename, "EXTRA");
 	}
-};
+}

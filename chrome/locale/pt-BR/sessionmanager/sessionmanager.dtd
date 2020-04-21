@@ -29,7 +29,7 @@
 <!ENTITY prompt.autosave.label "Fazer com que essa sessão se salve automaticamente">
 <!ENTITY prompt.tabprompt.label "Lembrar abas para restaurar">
 <!ENTITY load_replace.label "Carregar (Substitui a Sessão Atual)">
-<!ENTITY load_replace.accesskey "L">
+<!ENTITY load_replace.accesskey "C">
 <!ENTITY load_append.label "Carregar (Anexa à Sessão Atual)">
 <!ENTITY load_append.accesskey "A">
 <!ENTITY replace_all.label "Substituir Sessão com a Sessão Atual">
@@ -60,13 +60,12 @@
 <!ENTITY prompt.save_every2.label "minutos (se estiver em branco será desativado)">
 <!ENTITY winTabTree.restoreHeader "Restaurar">
 <!ENTITY winTabTree.listHeader "Janelas e Abas">
-<!--   LOCALIZATION NOTE: &#37;S will be replaced with a number.   -->
 <!ENTITY winTabTree.windowLabel "Janela &#37;S">
 <!ENTITY load.label "Carregar Sessão:">
 <!ENTITY load.accesskey "C">
 <!ENTITY prompt.append.label "Anexar à Sessão">
 <!ENTITY prompt.replace.label "Substituir Sessão">
-<!ENTITY ctrl_click_note.label "Nota: clicando uma entrada de aba ao segurar a tecla Ctrl, essa aba será aberta numa janela existente.">
+<!ENTITY tab_open_click_note.label "Nota: clicando uma entrada de aba ao segurar a tecla Alt, essa aba será aberta numa janela existente.">
 <!ENTITY select_all.label "Selecionar Todos">
 <!ENTITY select_none.label "Desmarcar todos">
 <!ENTITY toggle_selection.label "Inverter seleção">
@@ -79,7 +78,7 @@
 <!ENTITY abandonWindowSession.label "Abandonar janela da sessão">
 <!ENTITY abandonWindowSession.accesskey "b">
 <!ENTITY load_append_window.label "Carregar (Acrescenta à janela em Uso)">
-<!ENTITY load_append_window.accesskey "i">
+<!ENTITY load_append_window.accesskey "n">
 <!ENTITY leave_window_open.label "Mantenha esta janela aberta">
 <!ENTITY clearTabList.label "Limpar Lista de Abas 'Encerradas'">
 <!ENTITY clearTabList.accesskey "A">
@@ -94,7 +93,7 @@
 <!ENTITY empty_trash.label "Remove todas as sessões apagadas">
 <!ENTITY empty_trash.accesskey "R">
 <!ENTITY permanently_delete.label "Excluir permanentemente a sessão">
-<!ENTITY permanently_delete.accesskey "P">
+<!ENTITY permanently_delete.accesskey "x">
 <!ENTITY search.label "Busca...">
 <!ENTITY edit.label "Editar Sessão...">
 <!ENTITY edit.accesskey "E">

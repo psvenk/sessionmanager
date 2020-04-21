@@ -1,14 +1,10 @@
 <!ENTITY session_open.label "Odpri">
-<!ENTITY session_open.accesskey "O">
 <!ENTITY session_open.tooltip "Odpri izbrano sejo">
 <!ENTITY session_open_overwrite.label "Odpri (prepiši)">
-<!ENTITY session_open_overwrite.accesskey "v">
 <!ENTITY session_open_overwrite.tooltip "Odpri izbrano sejo ???">
 <!ENTITY session_open_newwindow.label "Odpri (novo okno)">
-<!ENTITY session_open_newwindow.accesskey "n">
 <!ENTITY session_open_newwindow.tooltip "Open izbrano sejo ???">
 <!ENTITY session_open_append.label "Odpri (dodaj)">
-<!ENTITY session_open_append.accesskey "a">
 <!ENTITY session_open_append.tooltip "Odpri izbrano sejo">
 <!ENTITY session_rename.label "Preimenuj...">
 <!ENTITY session_rename.accesskey "r">
@@ -18,7 +14,6 @@
 <!ENTITY session_delete.accesskey "z">
 <!ENTITY session_delete.tooltip "Izbriši izbrano sejo">
 <!ENTITY session_save.label "Shrani...">
-<!ENTITY session_save.accesskey "S">
 <!ENTITY session_save.tooltip "Shrani trenutna okna v novo sejo">
 <!ENTITY session_save_ok.label "Shrani">
 <!ENTITY session_save_w.label "Shrani okno...">

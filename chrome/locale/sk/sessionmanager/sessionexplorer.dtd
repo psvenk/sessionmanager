@@ -1,11 +1,8 @@
 <!ENTITY session_open.label "Otvoriť">
-<!ENTITY session_open.accesskey "O">
 <!ENTITY session_open.tooltip "Otvoriť označenú reláciu">
 <!ENTITY session_open_overwrite.label "Otvoriť (prepísať)">
-<!ENTITY session_open_overwrite.accesskey "v">
 <!ENTITY session_open_overwrite.tooltip "Otvoriť označenú reláciu?">
 <!ENTITY session_open_newwindow.label "Otvoriť (nové okno)">
-<!ENTITY session_open_newwindow.accesskey "n">
 <!ENTITY session_open_newwindow.tooltip "Otvoriť označenú reláciu?">
 <!ENTITY session_open_append.label "Otvoriť (pripojiť)">
 <!ENTITY session_open_append.accesskey "r">

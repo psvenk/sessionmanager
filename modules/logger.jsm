@@ -1,5 +1,7 @@
+"use strict";
+
 // Exported functions
-var EXPORTED_SYMBOLS = ["log", "logError", "deleteLogFile", "openLogFile", "logging_level"];
+this.EXPORTED_SYMBOLS = ["log", "logError", "deleteLogFile", "openLogFile", "logging_level"];
 
 // Configuration Constant Settings - addon specific
 const ADDON_NAME = "Session Manager";
@@ -16,33 +18,29 @@ const Ci = Components.interfaces
 const Cu = Components.utils;
 const report = Components.utils.reportError;
 
-// Get lazy getter functions from XPCOMUtils
+// Get lazy getter functions from XPCOMUtils and Services
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+Cu.import("resource://gre/modules/Services.jsm");
 
 // Lazily define services
-XPCOMUtils.defineLazyServiceGetter(this, "mPromptService", "@mozilla.org/embedcomp/prompt-service;1", "nsIPromptService");
-XPCOMUtils.defineLazyServiceGetter(this, "mConsoleService", "@mozilla.org/consoleservice;1", "nsIConsoleService");
-XPCOMUtils.defineLazyServiceGetter(this, "mObserverService", "@mozilla.org/observer-service;1", "nsIObserverService");
-XPCOMUtils.defineLazyServiceGetter(this, "mPreferenceBranch", "@mozilla.org/preferences-service;1", "nsIPrefBranch2");
 if (Cc["@mozilla.org/fuel/application;1"]) {
 	XPCOMUtils.defineLazyServiceGetter(this, "Application", "@mozilla.org/fuel/application;1", "fuelIApplication");
 }
 else if (Cc["@mozilla.org/smile/application;1"]) {
 	XPCOMUtils.defineLazyServiceGetter(this, "Application", "@mozilla.org/smile/application;1", "smileIApplication");
 }
+
+// EOL Character - dependent on operating system.
+XPCOMUtils.defineLazyGetter(this, "_EOL", function() {
+		return /mac|darwin/i.test(Services.appinfo.OS)?"\n":/win|os[\/_]?2/i.test(Services.appinfo.OS)?"\r\n":"\r";
+}); 
+
   
 // logging level
-var logging_level = {};
-logging_level["STATE"] = 1;
-logging_level["TRACE"] = 2;
-logging_level["DATA"] = 4;
-logging_level["INFO"] = 8;
-logging_level["EXTRA"] = 16;
-logging_level["ERROR"] = 32;
+this.logging_level = { STATE: 1, TRACE: 2, DATA: 4, INFO: 8, EXTRA: 16, ERROR: 32 };
+Object.freeze( this.logging_level );
 
 // private variables
-var _os = Cc["@mozilla.org/xre/app-info;1"].getService(Ci.nsIXULRuntime).OS;
-var _EOL = /win|os[\/_]?2/i.test(_os)?"\r\n":/mac|darwin/i.test(_os)?"\r":"\n";
 var _initialized = false;		// Logger module initialized
 var _logFile = null;			// Current log file
 var _logged_Addons = false;		// Set to true, when the current enabled add-ons have been logged (once per browsing session)
@@ -61,7 +59,10 @@ var buffer = [];
 //
 // Utility to create an error message in the log without throwing an error.
 //
-function logError(e, force) {
+function logError(e, force, time) {
+	if (_initialized && !_logEnabled && !force)
+		return
+
 	// If not an exception, just log it.
 	if (!e.message) {
 		log(e, "ERROR", force);
@@ -74,11 +75,13 @@ function logError(e, force) {
 	let location = e.stack || e.location || (e.fileName + ":" + e.lineNumber);
 	try { 
 		if (!_initialized) {
+			arguments[2] =(new Date).toGMTString();
+			arguments.length = 3;
 			buffer.push({ functionName: "logError", args: arguments});
 		}
 		else if (force || _logEnabled) {
-			mConsoleService.logStringMessage(ADDON_NAME + " (" + (new Date).toGMTString() + "): {" + e.message + "} {" + location + "}");
-			if (_logEnabled) write_log((new Date).toGMTString() + ": {" + e.message + "} {" + e.location + "}" + "\n");
+			Services.console.logStringMessage(ADDON_NAME + " - EXCEPTION (" + (time ? time : (new Date).toGMTString()) + "): {" + e.message + "} {" + location + "}");
+			if (_logEnabled) write_log((time ? time : (new Date).toGMTString()) + ": EXCEPTION - {" + e.message + "} {" + location + "}" + "\n");
 		}
 	}
 	catch (ex) {
@@ -89,18 +92,23 @@ function logError(e, force) {
 //
 // Log info messages
 //
-function log(aMessage, level, force) {
+function log(aMessage, level, force, time) {
+	if (_initialized && !_logEnabled && !force)
+		return
+		
 	// Log Addons if haven't already
 	if (!_logged_Addons) logExtensions();
 
 	if (!level) level = "INFO";
 	try {
 		if (!_initialized) {
+			arguments[3] =(new Date).toGMTString();
+			arguments.length = 4;
 			buffer.push({ functionName: "log", args: arguments});
 		}
 		else if (force || (_logEnabled && (logging_level[level] & _logLevel))) {
-			if (force || _logToConsole) mConsoleService.logStringMessage(ADDON_NAME + " (" + (new Date).toGMTString() + "): " + aMessage);
-			if (_logEnabled) write_log((new Date).toGMTString() + ": " + aMessage + "\n");
+			if (force || _logToConsole) Services.console.logStringMessage(ADDON_NAME + " (" + (time ? time : (new Date).toGMTString()) + "): " + aMessage);
+			if (_logEnabled) write_log((time ? time : (new Date).toGMTString()) + ": " + aMessage + "\n");
 		}
 	}
 	catch (ex) { 
@@ -136,9 +144,9 @@ function openLogFile() {
 	// Report error if log file not found
 	if (!_logFile || !_logFile.exists() || !(_logFile instanceof Ci.nsILocalFile)) {
 		try {
-			let bundle = Cc["@mozilla.org/intl/stringbundle;1"].getService(Ci.nsIStringBundleService).createBundle(BUNDLE_URI);
+			let bundle = Services.strings.createBundle(BUNDLE_URI);
 			let errorString = bundle.GetStringFromName(ERROR_STRING_NAME);	
-			mPromptService.alert(null, ADDON_NAME, errorString);
+			Services.prompt.alert(null, ADDON_NAME, errorString);
 		}
 		catch (ex) {
 			report(ex);
@@ -159,7 +167,7 @@ function openLogFile() {
 		}
 		catch (ex)
 		{
-			mPromptService.alert(null, ADDON_NAME, ex);
+			Services.prompt.alert(null, ADDON_NAME, ex);
 		}
 	}
 }
@@ -177,7 +185,7 @@ function setLogFile() {
 	if (!_logFile) {
 		try {
 			// Get Profile folder and append log file name
-			_logFile = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties).get("ProfD", Ci.nsIFile);
+			_logFile = Services.dirsvc.get("ProfD", Ci.nsIFile);
 			_logFile.append(FILE_NAME);
 		}
 		catch (ex) { 
@@ -200,7 +208,7 @@ function write_log(aMessage) {
 	try {
 		let stream = Cc["@mozilla.org/network/file-output-stream;1"].createInstance(Ci.nsIFileOutputStream);
 		// ioFlags: write only, create file, append;	Permission: read/write owner
-		stream.init(_logFile, 0x02 | 0x08 | 0x10, 0600, 0);
+		stream.init(_logFile, 0x02 | 0x08 | 0x10, 384, 0);
 		let cvstream = Cc["@mozilla.org/intl/converter-output-stream;1"].createInstance(Ci.nsIConverterOutputStream);
 		cvstream.init(stream, "UTF-8", 0, Ci.nsIConverterInputStream.DEFAULT_REPLACEMENT_CHARACTER);
 
@@ -229,23 +237,21 @@ function logExtensions(aExtensions) {
 	// Quit if Application doesn't exist or called from background thread (to prevent rare timing crash)
 	if (!Application || !Cc["@mozilla.org/thread-manager;1"].getService().isMainThread) return;
 		
-	// Firefox 4.0 changes method for getting extensions to a callback function.  Use this function as the callback
-	// function and check the parameter since it will be set if called back or null if called internally.
-	if (!aExtensions && (typeof(Application.getExtensions) == "function")) {
+	// Use this function as the callback function and check the parameter since it will be set if called back or null if called internally.
+	if (!aExtensions) {
 		Application.getExtensions(logExtensions);
 		return false;
 	}
-	let extensions = aExtensions ? aExtensions : Application.extensions;
+	let extensions = aExtensions;
 
 	// Set to initialized.  Do this here so the addons are always logged first
 	_initialized = true;
 	
 	// Log OS, browser version and locale
-	let logString = "\n\tOS = " + _os + "\n\tBrowser = " + Application.id + " - " + Application.name + " " + Application.version;
+	let logString = "\n\tOS = " + Services.appinfo.OS + "\n\tBrowser = " + Application.id + " - " + Application.name + " " + Application.version;
 	logString += "\n\tLocale = " + Application.prefs.getValue("general.useragent.locale", "unknown");
 	
-	// Log Addons - This takes quite a long time per add-on under Firefox 3.6.x.  For 50 addons it takes 10 seconds.  This should probably log using a setTimeout or
-	//            - I should switch back to using RDF. It loads very quickly under Firefox 4.0 and up so don't need to do anything there.
+	// Log Addons 
 	if (extensions.all.length) {
 		logString += "\n\tExtensions installed and enabled:\n\t   ";
 		let extString = [];
@@ -258,21 +264,17 @@ function logExtensions(aExtensions) {
 	}
 	
 	// Log related Firefox prefences
-	logString += "\n\tFirefox preferences:";
+	logString += "\n\tBrowser preferences:";
+	logString += "\n\t   browser.privatebrowsing.autostart = " + Application.prefs.getValue("browser.privatebrowsing.autostart","");
 	logString += "\n\t   browser.startup.page = " + Application.prefs.getValue("browser.startup.page","");
-	logString += "\n\t   browser.sessionstore.interval = " + Application.prefs.getValue("browser.sessionstore.interval","");
-	logString += "\n\t   browser.sessionstore.max_concurrent_tabs = " + Application.prefs.getValue("browser.sessionstore.max_concurrent_tabs","");
-	logString += "\n\t   browser.sessionstore.max_resumed_crashes = " + Application.prefs.getValue("browser.sessionstore.max_resumed_crashes","");
-	logString += "\n\t   browser.sessionstore.max_tabs_undo = " + Application.prefs.getValue("browser.sessionstore.max_tabs_undo","");
-	logString += "\n\t   browser.sessionstore.max_windows_undo = " + Application.prefs.getValue("browser.sessionstore.max_windows_undo","");
-	logString += "\n\t   browser.sessionstore.postdata = " + Application.prefs.getValue("browser.sessionstore.postdata","");
-	logString += "\n\t   browser.sessionstore.privacy_level = " + Application.prefs.getValue("browser.sessionstore.privacy_level","");
-	logString += "\n\t   browser.sessionstore.privacy_level_deferred = " + Application.prefs.getValue("browser.sessionstore.privacy_level_deferred","");
-	logString += "\n\t   browser.sessionstore.resume_from_crash = " + Application.prefs.getValue("browser.sessionstore.resume_from_crash","");
-	logString += "\n\t   browser.sessionstore.restore_hidden_tabs = " + Application.prefs.getValue("browser.sessionstore.restore_hidden_tabs","");
-	logString += "\n\t   browser.sessionstore.resume_session_once = " + Application.prefs.getValue("browser.sessionstore.resume_session_once","");
+	let sessionStorePrefs = Services.prefs.getBranch("browser.sessionstore.").getChildList("",{});
+	for (let i=0; i < sessionStorePrefs.length; i++) {
+		logString += "\n\t   browser.sessionstore." + sessionStorePrefs[i] + " = " + Application.prefs.getValue("browser.sessionstore." + sessionStorePrefs[i],"");
+	}
 	logString += "\n\t   browser.tabs.warnOnClose = " + Application.prefs.getValue("browser.tabs.warnOnClose","");
 	logString += "\n\t   browser.warnOnQuit = " + Application.prefs.getValue("browser.warnOnQuit","");
+	logString += "\n\t   privacy.clearOnShutdown.history = " + Application.prefs.getValue("privacy.clearOnShutdown.history","");
+	logString += "\n\t   privacy.sanitize.sanitizeOnShutdown = " + Application.prefs.getValue("privacy.sanitize.sanitizeOnShutdown","");
   
 	// Log preferences
 	let prefs = extensions.get(UUID).prefs.all
@@ -298,14 +300,15 @@ function logStoredBuffer() {
 		while (item = buffer.shift()) {
 			switch (item.functionName) {
 			case "log":
-				log(item.args[0], item.args[1], item.args[2]);
+				log(item.args[0], item.args[1], item.args[2], item.args[3]);
 				break;
 			case "logError":
-				logError(item.args[0], item.args[1]);
+				logError(item.args[0], item.args[1], item.args[2]);
 				break;
 			}
 		}
-		delete buffer;
+		buffer = null;
+		log("End of Stored Log Buffer", "INFO");
 	}
 }
 
@@ -329,12 +332,12 @@ var observer = {
 			}
 			break;
 		case "final-ui-startup":
-			mObserverService.removeObserver(this, "final-ui-startup");
-			mObserverService.addObserver(this, "profile-change-teardown", false);
+			Services.obs.removeObserver(this, "final-ui-startup");
+			Services.obs.addObserver(this, "profile-change-teardown", false);
 			
 			// Can't use FUEL/SMILE to listen for preference changes because of bug 488587 so just use an observer
 			// only need to register LOG_ENABLE_PREFERENCE_NAME because "*.logging" is in "*.logging_level" so it gets both of them
-			mPreferenceBranch.addObserver(LOG_ENABLE_PREFERENCE_NAME, this, false);
+			Services.prefs.addObserver(LOG_ENABLE_PREFERENCE_NAME, this, false);
 			
 			_logEnabled = Application.prefs.get(LOG_ENABLE_PREFERENCE_NAME).value;
 			_logToConsole = Application.prefs.get(LOG_CONSOLE_PREFERENCE_NAME).value;
@@ -349,17 +352,18 @@ var observer = {
 			else {
 				// Set to initialized so we don't buffer any more
 				_initialized = true;
-				delete(buffer);
+				_logged_Addons = false;
+				buffer = null;
 			}
 			break;
 		case "profile-change-teardown":
 			// remove observers
-			mObserverService.removeObserver(this, "profile-change-teardown");
-			mPreferenceBranch.removeObserver(LOG_ENABLE_PREFERENCE_NAME, this);
+			Services.obs.removeObserver(this, "profile-change-teardown");
+			Services.prefs.removeObserver(LOG_ENABLE_PREFERENCE_NAME, this);
 		}
 	}
 }
 
 // Initialize on the "final-ui-startup" notification because if we initialized prior to that a number of bad things will happen,
 // including, the log file failing to delete and the Fuel Application component's preference observer not working.
-mObserverService.addObserver(observer, "final-ui-startup", false);
+Services.obs.addObserver(observer, "final-ui-startup", false);

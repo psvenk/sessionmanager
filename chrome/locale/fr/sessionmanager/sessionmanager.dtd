@@ -39,7 +39,7 @@
 <!ENTITY remove_one.label "Supprimer la session…">
 <!ENTITY set_startup.label "Définir comme session de démarrage">
 <!ENTITY set_startup.accesskey "d">
-<!ENTITY openSessionManagerSidebar.commandkey "S">
+<!ENTITY openSessionManagerSidebar.commandkey "P">
 <!ENTITY session_name.label "Nom">
 <!ENTITY session_windows.label "Fenêtres">
 <!ENTITY session_tabs.label "Onglets">
@@ -60,13 +60,12 @@
 <!ENTITY prompt.save_every2.label "minutes (désactivé si vide)">
 <!ENTITY winTabTree.restoreHeader "Rétablir">
 <!ENTITY winTabTree.listHeader "Fenêtres et onglets">
-<!-- LOCALIZATION NOTE: &#37;S will be replaced with a number. -->
 <!ENTITY winTabTree.windowLabel "Fenêtre &#37;S">
 <!ENTITY load.label "Chargement de la session…">
 <!ENTITY load.accesskey "C">
 <!ENTITY prompt.append.label "Ajouter à la session">
 <!ENTITY prompt.replace.label "Remplacer la session">
-<!ENTITY ctrl_click_note.label "Remarque : En cliquant sur le nom d&apos;un onglet tout en maintenant la touche CTRL, vous ouvrirez cet onglet dans la fenêtre existante.">
+<!ENTITY tab_open_click_note.label "Remarque : En cliquant sur le nom d'un onglet tout en maintenant la touche ALT, vous ouvrirez cet onglet dans la fenêtre existante.">
 <!ENTITY select_all.label "Tout sélectionner">
 <!ENTITY select_none.label "Ne rien sélectionner">
 <!ENTITY toggle_selection.label "Intervertir la sélection">
@@ -90,7 +89,7 @@
 <!ENTITY support.label "Soutenir cette extension :">
 <!ENTITY session_group_verb.label "Groupe">
 <!ENTITY deleted_sessions.label "Sessions supprimées">
-<!ENTITY deleted_sessions.accesskey "e">
+<!ENTITY deleted_sessions.accesskey "u">
 <!ENTITY empty_trash.label "Supprimer toutes les sessions supprimées">
 <!ENTITY empty_trash.accesskey "S">
 <!ENTITY permanently_delete.label "Supprimer définitivement la session">

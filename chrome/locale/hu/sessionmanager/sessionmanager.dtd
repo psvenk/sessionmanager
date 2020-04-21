@@ -66,7 +66,7 @@
 <!ENTITY load.accesskey "l">
 <!ENTITY prompt.append.label "Hozzáfűzés a jelenlegi munkamenethez">
 <!ENTITY prompt.replace.label "Jelenlegi munkamenet felülírása">
-<!ENTITY ctrl_click_note.label "Megjegyzés: az aktuális ablakban nyílik meg, ha a bejegyzésre kattintás közben a CTRL billentyű le van nyomva.">
+<!ENTITY tab_open_click_note.label "Megjegyzés: az aktuális ablakban nyílik meg, ha a bejegyzésre kattintás közben a ALT billentyű le van nyomva.">
 <!ENTITY select_all.label "Mindent kijelöl">
 <!ENTITY select_none.label "Kijelölés megszüntetése">
 <!ENTITY toggle_selection.label "Kijelölés megfordítása">
@@ -79,7 +79,7 @@
 <!ENTITY abandonWindowSession.label "Munkamenet ablak elvetése">
 <!ENTITY abandonWindowSession.accesskey "v">
 <!ENTITY load_append_window.label "Betöltés (hozzáadás a jelenlegi ablakhoz)">
-<!ENTITY load_append_window.accesskey "i">
+<!ENTITY load_append_window.accesskey "B">
 <!ENTITY leave_window_open.label "Az ablak maradjon nyitva">
 <!ENTITY clearTabList.label "A 'Bezárt' lapok listájának törlése...">
 <!ENTITY clearTabList.accesskey "l">

@@ -79,7 +79,7 @@
 <!ENTITY cookies.label "Munkamenetekhez tartozó sütik mentése">
 <!ENTITY cookies.accesskey "M">
 <!ENTITY sessionImport.caption "Munkamenetek importálása...">
-<!ENTITY importSS.label "SessionSaver">
+<!ENTITY importSS.label "Session Saver">
 <!ENTITY importSS.accesskey "v">
 <!ENTITY importTMP.label "Tab Mix Plus">
 <!ENTITY importTMP.accesskey "T">

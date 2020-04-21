@@ -39,7 +39,6 @@
 <!ENTITY remove_one.label "Odstrániť reláciu...">
 <!ENTITY set_startup.label "Nastaviť ako reláciu pri spustení">
 <!ENTITY set_startup.accesskey "e">
-<!ENTITY openSessionManagerSidebar.commandkey "S">
 <!ENTITY session_name.label "Názov">
 <!ENTITY session_windows.label "Okná">
 <!ENTITY session_tabs.label "Karty">
@@ -65,7 +64,7 @@
 <!ENTITY load.accesskey "N">
 <!ENTITY prompt.append.label "Pripojiť k relácii">
 <!ENTITY prompt.replace.label "Nahradiť reláciu">
-<!ENTITY ctrl_click_note.label "Poznámka: ak kliknete na položku karty a budete pritom držať kláves CTRL, daná karta sa otvorí v existujúcom okne.">
+<!ENTITY tab_open_click_note.label "Poznámka: ak kliknete na položku karty a budete pritom držať kláves ALT, daná karta sa otvorí v existujúcom okne.">
 <!ENTITY select_all.label "Vybrať všetko">
 <!ENTITY select_none.label "Nevybrať nič">
 <!ENTITY toggle_selection.label "Prepnúť výber">
@@ -89,7 +88,6 @@
 <!ENTITY support.label "Podporiť tento doplnok:">
 <!ENTITY session_group_verb.label "Zoskupiť">
 <!ENTITY deleted_sessions.label "Odstránené relácie">
-<!ENTITY deleted_sessions.accesskey "e">
 <!ENTITY empty_trash.label "Odstrániť všetky odstránené relácie">
 <!ENTITY empty_trash.accesskey "d">
 <!ENTITY permanently_delete.label "Natrvalo odstrániť reláciu">

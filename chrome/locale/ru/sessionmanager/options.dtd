@@ -159,10 +159,14 @@
 <!ENTITY keep_deleted_sessions.accesskey "Д">
 <!ENTITY concurrent.label "Число одновременно восстанавливаемых вкладок:">
 <!ENTITY concurrent.accesskey "О">
+<!ENTITY do_not_color_toolbar_button.label "Не подкрашивать кнопку на панели при загрузке сессии">
+<!ENTITY do_not_color_toolbar_button.accesskey "п">
 <!ENTITY preserve_app_tabs.label "Не заменять прикреплённые вкладки">
 <!ENTITY preserve_app_tabs.accesskey "Н">
 <!ENTITY logging_to_console.label "Дублировать вывод в Консоль ошибок">
 <!ENTITY logging_to_console.accesskey "о">
+<!ENTITY update_message.label "Открывать web-страницу с информацией об обновлении">
+<!ENTITY update_message.accesskey "О">
 <!ENTITY double_click_session.label "Двойной щелчок по существующей сессии перезапишет её и">
 <!ENTITY double_click_session.accesskey "в">
 <!ENTITY replace_with_name_replace.label "заменит имя на предлагаемое имя из текстового поля">
@@ -175,3 +179,20 @@
 <!ENTITY change_encryption_key_password.accesskey "И">
 <!ENTITY save_encryption_key.label "Сохранить пароль ключа шифрования в системе управления паролями броузера">
 <!ENTITY save_encryption_key.accesskey "С">
+<!ENTITY restore_hidden_tabs.label "Восстанавливать скрытые вкладки">
+<!ENTITY restore_hidden_tabs.accesskey "В">
+<!ENTITY display_menus_in_submenu.label "Показывать элементы меню Менеджера сессий внутри вложенного меню">
+<!ENTITY display_menus_in_submenu.accesskey "М">
+<!ENTITY use_sql_cache.label "Сохранять базовую информацию о сессиях на диск. Позволяет искать данные внутри сессий">
+<!ENTITY use_sql_cache.accesskey "С">
+<!ENTITY rebuild_cache.label "Перестроить содержимое кэша">
+<!ENTITY rebuild_cache.accesskey "П">
+<!ENTITY log_level_error.label "Вести лог ошибок">
+<!ENTITY log_level_error.accesskey "О">
+<!ENTITY allow_duplicates.label "Разрешить сохранение сессий с одинаковыми именами">
+<!ENTITY allow_duplicates.accesskey "И">
+<!ENTITY backup_every.label "Создавать новую резервную сессию каждые:">
+<!ENTITY backup_every.accesskey "з">
+<!ENTITY minutes "минут">
+<!ENTITY restore_on_demand.label "Восстанавливать вкладки по требованию">
+<!ENTITY restore_on_demand.accesskey "т">
