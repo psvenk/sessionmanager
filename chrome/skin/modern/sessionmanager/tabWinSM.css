@@ -1,4 +1,0 @@
-/* Window and Tab tree - differences for SeaMonkey */
-treechildren::-moz-tree-image(noicon) {
-  list-style-image: url("chrome://sessionmanager/skin/bookmark-item.png");
-}
